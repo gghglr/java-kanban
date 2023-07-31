@@ -114,7 +114,7 @@ public class TaskTracker {
     }
     public void deleteAllSubtasks(Long epicId, Epic epic){ //удаление всех сабтасков у конкретного эпика
         for(Subtask subtask : subtasks.values()){
-            if(subtask.getEpicId() == epicId){
+            if(subtask.getEpicId().equals(epicId)){
                 epic.clearSubtaskIds(subtask.getId());
             }
             subtasks.remove(subtask);
@@ -126,7 +126,7 @@ public class TaskTracker {
         System.out.println("Эпик: " + epic.getName() + " Статус: " + epic.getStatus());
         for (Subtask subtask : subtasks.values()) {
             for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
-                if (subtask.getId() == epic.getSubtaskIds().get(i)) {
+                if (subtask.getId().equals(epic.getSubtaskIds().get(i))) {
                     allSubtasksForCurrentEpic.add(subtask.getName());
                 }
             }
@@ -152,7 +152,7 @@ public class TaskTracker {
                     " Статус: " + epic.getStatus());
             for (Subtask subtask : subtasks.values()) {
                 for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
-                    if (subtask.getId() == epic.getSubtaskIds().get(i)) {
+                    if (subtask.getId().equals(epic.getSubtaskIds().get(i))) {
                         System.out.println("● " + subtask.getName() + " Описание: " + epic.getDesc() +
                                 " Статус " + subtask.getStatus());
                     }
