@@ -1,16 +1,17 @@
 package ru.practicum.task_tracker.manager;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
-
+import java.util.Map;
 import ru.practicum.task_tracker.task.*;
 
 public class InMemoryTaskManager implements TaskTracker {
-    private final HashMap<Long, Epic> epics = new HashMap<>();
-    private final HashMap<Long, Subtask> subtasks = new HashMap<>();
-    private final HashMap<Long, Task> tasks = new HashMap<>();
+    private final Map<Long, Epic> epics = new HashMap<>();
+    private final Map<Long, Subtask> subtasks = new HashMap<>();
+    private final Map<Long, Task> tasks = new HashMap<>();
     private long currentId = 0;
-    HistoryManager historyManager = Managers.getDefaultHistory();
+    private HistoryManager historyManager = Managers.getDefaultHistory();
     @Override
     public long createTask(Task task) {
         task.setId(generateId());
@@ -61,7 +62,7 @@ public class InMemoryTaskManager implements TaskTracker {
     @Override
     public void updateEpicStatus(long epicId) {
         Epic epic = epics.get(epicId);
-        ArrayList<Long> subtasksIds = epic.getSubtaskIds();
+        List<Long> subtasksIds = epic.getSubtaskIds();
         if (subtasksIds.isEmpty()) {
             epic.setStatus(Status.NEW);
             return;
@@ -130,7 +131,7 @@ public class InMemoryTaskManager implements TaskTracker {
 
     //все сабтаски
     @Override
-    public ArrayList<String> printEpicById(Epic epic) { // метод возрщения и печати конкретного эпика
+    public List<String> printEpicById(Epic epic) { // метод возрщения и печати конкретного эпика
         ArrayList<String> allSubtasksForCurrentEpic = new ArrayList<>();
         System.out.println("Эпик: " + epic.getName() + " Статус: " + epic.getStatus());
         for (Subtask subtask : subtasks.values()) {

@@ -4,12 +4,12 @@ public class Task {
     protected Long id;
     protected String name;
     protected String desc; // описание
-    protected Status status2;
+    protected Status status;
 
     public Task(String name, String desc, Status status) {
         this.name = name;
         this.desc = desc;
-        this.status2 = status;
+        this.status = status;
     }
 
     public Long getId() {
@@ -25,11 +25,11 @@ public class Task {
     }
 
     public String getStringStatus() {
-        return String.valueOf(status2);
+        return String.valueOf(status);
     }
 
     public Status getStatus() {
-        return status2;
+        return status;
     }
 
     public void setId(Long id) {
@@ -45,7 +45,7 @@ public class Task {
     }
 
     public void setStatus(Status status2) {
-        this.status2 = status2;
+        this.status = status2;
     }
 
 

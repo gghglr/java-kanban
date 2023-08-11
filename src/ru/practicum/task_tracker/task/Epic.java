@@ -1,8 +1,9 @@
 package ru.practicum.task_tracker.task;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Epic extends Task{
-    private ArrayList<Long> subtaskIds; // в этом списке лежат id сабстасков для эпика
+    private List<Long> subtaskIds; // в этом списке лежат id сабстасков для эпика
     public Epic(String name, String desc) {
         super(name, desc, Status.NEW);
         subtaskIds = new ArrayList<>();
@@ -12,11 +13,11 @@ public class Epic extends Task{
         subtaskIds.add(subtaskId);
     }
 
-    public ArrayList<Long> getSubtaskIds() {
+    public List<Long> getSubtaskIds() {
         return subtaskIds;
     }
 
-    public void setSubtaskIds(ArrayList<Long> subtaskIds) {
+    public void setSubtaskIds(List<Long> subtaskIds) {
         this.subtaskIds = subtaskIds;
     }
 

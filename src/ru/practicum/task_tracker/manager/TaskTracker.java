@@ -1,6 +1,6 @@
 package ru.practicum.task_tracker.manager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Subtask;
@@ -18,7 +18,7 @@ public interface TaskTracker {
     void updateSubtaskInfo(Subtask subtask, Long id);
     void updateTaskInfo(Task task, Long id);
     void deleteSubtaskById(Long subtaskId);
-    ArrayList<String> printEpicById(Epic epic);
+    List<String> printEpicById(Epic epic);
     void deleteEpic(Long epicId);
     void print();
     void printHistory();
