@@ -132,7 +132,7 @@ public class InMemoryTaskManager implements TaskTracker {
     //все сабтаски
     @Override
     public List<String> printEpicById(Epic epic) { // метод возрщения и печати конкретного эпика
-        ArrayList<String> allSubtasksForCurrentEpic = new ArrayList<>();
+        List<String> allSubtasksForCurrentEpic = new ArrayList<>();
         System.out.println("Эпик: " + epic.getName() + " Статус: " + epic.getStatus());
         for (Subtask subtask : subtasks.values()) {
             for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
@@ -194,15 +194,15 @@ public class InMemoryTaskManager implements TaskTracker {
     public void print() {
         System.out.println("Печать task");
         for (Task task : tasks.values()) {
-            System.out.println(task.getName() + " Описание: " + task.getDesc() + " Статус: " + task.getStatus());
+            System.out.println(task.getName() + " Описание: " + task.getDescription() + " Статус: " + task.getStatus());
         }
         for (Epic epic : epics.values()) {
-            System.out.println("Эпик: " + epic.getName() + " Описание: " + epic.getDesc() +
+            System.out.println("Эпик: " + epic.getName() + " Описание: " + epic.getDescription() +
                     " Статус: " + epic.getStatus());
             for (Subtask subtask : subtasks.values()) {
                 for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
                     if (subtask.getId().equals(epic.getSubtaskIds().get(i))) {
-                        System.out.println("● " + subtask.getName() + " Описание: " + epic.getDesc() +
+                        System.out.println("● " + subtask.getName() + " Описание: " + epic.getDescription() +
                                 " Статус " + subtask.getStatus());
                     }
                 }

@@ -3,12 +3,12 @@ package ru.practicum.task_tracker.task;
 public class Task {
     protected Long id;
     protected String name;
-    protected String desc; // описание
+    protected String description; // описание
     protected Status status;
 
-    public Task(String name, String desc, Status status) {
+    public Task(String name, String description, Status status) {
         this.name = name;
-        this.desc = desc;
+        this.description = description;
         this.status = status;
     }
 
@@ -20,8 +20,8 @@ public class Task {
         return name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getDescription() {
+        return description;
     }
 
     public String getStringStatus() {
@@ -40,8 +40,8 @@ public class Task {
         this.name = name;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setDescription(String desc) {
+        this.description = description;
     }
 
     public void setStatus(Status status2) {
