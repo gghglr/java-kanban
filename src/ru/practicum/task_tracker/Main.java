@@ -61,7 +61,11 @@ public class Main {
         taskTracker.print();*/
         System.out.println("История просмоторов задач: ");
         taskTracker.getTask(taskId2);
+        taskTracker.getTask(taskId2);
         taskTracker.getEpic(epic1Id);
+        taskTracker.getEpic(epic1Id);
+        taskTracker.getSubtask(subtaskId3);
+        taskTracker.getSubtask(subtaskId3);
         taskTracker.getSubtask(subtaskId3);
         taskTracker.printHistory();
 

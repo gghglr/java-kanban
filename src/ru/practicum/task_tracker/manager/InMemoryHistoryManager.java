@@ -3,27 +3,24 @@ package ru.practicum.task_tracker.manager;
 import ru.practicum.task_tracker.task.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager{
-    private List<Task> history = new ArrayList<>();
-    private static int MAX_HISTORY_SIZE = 10;
-
+    //private final List<Task> history = new ArrayList<>();
+    CustomLinkedList customLinkedList = new CustomLinkedList();
     @Override
     public void add(Task task) {
-        if(task == null){
-            return;
-        }
-        else if(history.size() == MAX_HISTORY_SIZE){
-            history.remove(0);
-            history.add(task);
-        }
-        else{
-            history.add(task);
-        }
+        customLinkedList.AddTask(task);
+    }
+    @Override
+    public void remove(int id){
+        customLinkedList.remove(id);
     }
     @Override
     public List<Task> getHistory() {
-        return List.copyOf(history);
+        return customLinkedList.getTasks();
     }
+
 }
