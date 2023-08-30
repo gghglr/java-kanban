@@ -1,4 +1,5 @@
 package ru.practicum.task_tracker;
+import ru.practicum.task_tracker.manager.HistoryManager;
 import ru.practicum.task_tracker.manager.Managers;
 import ru.practicum.task_tracker.manager.TaskTracker;
 import ru.practicum.task_tracker.task.*;
@@ -6,6 +7,7 @@ import ru.practicum.task_tracker.task.*;
 public class Main {
     public static void main(String[] args) {
         TaskTracker taskTracker = Managers.getDefault();
+        HistoryManager historyManager = Managers.getDefaultHistory();
 
         Task task1 = new Task("Прочитать книгу", "Джордж Оруэлл, 1984", Status.NEW);
         long taskId1 = taskTracker.createTask(task1);
@@ -67,6 +69,7 @@ public class Main {
         taskTracker.getSubtask(subtaskId3);
         taskTracker.getSubtask(subtaskId3);
         taskTracker.getSubtask(subtaskId3);
+        historyManager.remove(taskId2);
         taskTracker.printHistory();
 
     }

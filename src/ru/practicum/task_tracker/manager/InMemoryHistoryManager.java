@@ -15,7 +15,7 @@ public class InMemoryHistoryManager implements HistoryManager{
         customLinkedList.AddTask(task);
     }
     @Override
-    public void remove(int id){
+    public void remove(long id){
         customLinkedList.remove(id);
     }
     @Override
