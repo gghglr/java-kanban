@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
+
 import ru.practicum.task_tracker.task.*;
 
 public class InMemoryTaskManager implements TaskTracker {
@@ -12,6 +13,7 @@ public class InMemoryTaskManager implements TaskTracker {
     private final Map<Long, Task> tasks = new HashMap<>();
     private long currentId = 0;
     private HistoryManager historyManager = Managers.getDefaultHistory();
+
     @Override
     public long createTask(Task task) {
         task.setId(generateId());
@@ -25,6 +27,7 @@ public class InMemoryTaskManager implements TaskTracker {
         epics.put(epic.getId(), epic);
         return epic.getId();
     }
+
     @Override
     public Long addNewSubtask(Subtask subtask) {
         Epic epic = epics.get(subtask.getEpicId());
@@ -87,9 +90,10 @@ public class InMemoryTaskManager implements TaskTracker {
     @Override
     public void updateEpicInfo(Epic epic, Long id) {
         Epic oldEpicInfo = epics.get(id);
-        epic.setId(id);
-        epic.setSubtaskIds(oldEpicInfo.getSubtaskIds());
-        epics.put(id, epic);
+        if(oldEpicInfo != null){
+            oldEpicInfo.setDescription(epic.getDescription());
+            oldEpicInfo.setSubtaskIds(epic.getSubtaskIds());
+        }
         updateEpicStatus(id);
     }
 
@@ -126,6 +130,7 @@ public class InMemoryTaskManager implements TaskTracker {
                 epic.clearSubtaskIds(subtask.getId());
             }
             subtasks.remove(subtask);
+            updateEpicStatus(epic.getId());
         }
     }
 
@@ -155,10 +160,11 @@ public class InMemoryTaskManager implements TaskTracker {
     public long generateId() {
         return currentId++;
     }
+
     @Override
-    public Task getTask(Long id){
-        for(Long idTask : tasks.keySet()){
-            if(idTask == id){
+    public Task getTask(Long id) {
+        for (Long idTask : tasks.keySet()) {
+            if (idTask == id) {
                 historyManager.add(tasks.get(id));
                 return tasks.get(idTask);
             }
@@ -168,9 +174,9 @@ public class InMemoryTaskManager implements TaskTracker {
     }
 
     @Override
-    public Subtask getSubtask(Long id){
-        for(Long idSubtask : subtasks.keySet()){
-            if(idSubtask == id){
+    public Subtask getSubtask(Long id) {
+        for (Long idSubtask : subtasks.keySet()) {
+            if (idSubtask == id) {
                 historyManager.add(subtasks.get(id));
                 return subtasks.get(idSubtask);
             }
@@ -178,10 +184,11 @@ public class InMemoryTaskManager implements TaskTracker {
         System.out.println("Subtask с таким id не существует");
         return null;
     }
+
     @Override
-    public Epic getEpic(Long id){
-        for(Long idEpic : epics.keySet()){
-            if(idEpic == id){
+    public Epic getEpic(Long id) {
+        for (Long idEpic : epics.keySet()) {
+            if (idEpic == id) {
                 historyManager.add(epics.get(id));
                 return epics.get(idEpic);
             }
@@ -209,8 +216,9 @@ public class InMemoryTaskManager implements TaskTracker {
             }
         }
     }
-    public void printHistory(){
-        for (int i = 0; i < historyManager.getHistory().size(); i++){
+
+    public void printHistory() {
+        for (int i = 0; i < historyManager.getHistory().size(); i++) {
             System.out.println(historyManager.getHistory().get(i).getName());
         }
     }

@@ -41,7 +41,7 @@ public class Task {
     }
 
     public void setDescription(String desc) {
-        this.description = description;
+        this.description = desc;
     }
 
     public void setStatus(Status status2) {

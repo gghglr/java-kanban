@@ -11,7 +11,7 @@ public class CustomLinkedList {
     private Node first;
     private Node last;
 
-    static class Node{
+    static class Node {
         Task task;
         Node prev;
         Node next;
@@ -22,16 +22,17 @@ public class CustomLinkedList {
             this.next = next;
         }
     }
-    public void remove(long id){
+
+    public void remove(long id) {
         Node node = nodeMap.get(id);
-        if(node == null){
+        if (node == null) {
             return;
         }
         removeNode(node);
     }
 
-    public void AddTask(Task task){
-        if (task == null){
+    public void addTask(Task task) {
+        if (task == null) {
             return;
         }
         long id = task.getId();
@@ -41,39 +42,35 @@ public class CustomLinkedList {
 
     }
 
-    private void linkLast(Task task){
+    private void linkLast(Task task) {
         Node node = new Node(task, last, null);
-        if(first == null);
-
-        else {
+        if (first != null) {
             last.next = node;
-
         }
-
         last = node;
     }
 
-    public ArrayList getTasks() {
+    public ArrayList<Task> getTasks() {
         ArrayList<Task> tasks = new ArrayList<>();
-        for(Node node : nodeMap.values()){
+        for (Node node : nodeMap.values()) {
             tasks.add(node.task);
         }
         return tasks;
     }
 
-    private void removeNode(Node node){
-        if(node.prev != null){
+    private void removeNode(Node node) {
+        if (node.prev != null) {
             node.prev.next = node.next;
-            if(node.next == null){
+            if (node.next == null) {
                 last = node.prev;
-            }else{
+            } else {
                 node.next.prev = node.prev;
             }
-        }else {
+        } else {
             first = node.next;
-            if(first == null){
+            if (first == null) {
                 last = null;
-            }else{
+            } else {
                 first.prev = null;
             }
         }
