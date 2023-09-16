@@ -10,4 +10,5 @@ public interface HistoryManager {
     void remove(long id);
 
     List<Task> getHistory();
+
 }

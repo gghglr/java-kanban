@@ -1,14 +1,16 @@
 package ru.practicum.task_tracker;
 
-import ru.practicum.task_tracker.manager.HistoryManager;
-import ru.practicum.task_tracker.manager.Managers;
-import ru.practicum.task_tracker.manager.TaskTracker;
+import ru.practicum.task_tracker.manager.*;
 import ru.practicum.task_tracker.task.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main {
-    public static void main(String[] args) {
-        TaskTracker taskTracker = Managers.getDefault();
-        HistoryManager historyManager = Managers.getDefaultHistory();
+    public static void main(String[] args) throws IOException {
+        /*TaskTracker taskTracker = Managers.getDefault();
 
         Task task1 = new Task("Прочитать книгу", "Джордж Оруэлл, 1984", Status.NEW);
         long taskId1 = taskTracker.createTask(task1);
@@ -16,7 +18,7 @@ public class Main {
         Task task2 = new Task("Погулять с собакой", "Пойти прогуляться по парку с собакой в 6 вечера", Status.NEW);
         long taskId2 = taskTracker.createTask(task2);
 
-        Epic epic1 = new Epic("Убраться дома", "Быстрая уборка");
+        Epic epic1 = new Epic("Убраться дома", "Быстрая уборка", Status.NEW);
         long epic1Id = taskTracker.createEpic(epic1);
 
         Subtask subtask1 = new Subtask("Пропылесосить", "Включить пылесос и пропылесосить все команты",
@@ -27,7 +29,7 @@ public class Main {
                 "сделать влажную уборку в каждой команте", Status.NEW, epic1Id);
         long subtaskId2 = taskTracker.addNewSubtask(subtask2);
 
-        Epic epic2 = new Epic("Сходить в магазин", "Купить продукты для омлета");
+        Epic epic2 = new Epic("Сходить в магазин", "Купить продукты для омлета", Status.NEW);
         long epic2Id = taskTracker.createEpic(epic2);
 
         Subtask subtask3 = new Subtask("Купить молоко", "1 литр молока 3,2%", Status.NEW, epic2Id);
@@ -62,6 +64,7 @@ public class Main {
         Subtask subtask4 = new Subtask("Протереть везде полы и пыль", "Со средством", "New", epic2Id);
         taskTracker.updateSubtaskInfo(subtask4, subtaskId2);
         taskTracker.print();*/
+        /*
         System.out.println("История просмоторов задач: ");
         taskTracker.getTask(taskId2);
         taskTracker.getTask(taskId2);
@@ -70,8 +73,7 @@ public class Main {
         taskTracker.getSubtask(subtaskId3);
         taskTracker.getSubtask(subtaskId3);
         taskTracker.getSubtask(subtaskId3);
-        historyManager.remove(taskId2);
         taskTracker.printHistory();
-
+        */
     }
 }

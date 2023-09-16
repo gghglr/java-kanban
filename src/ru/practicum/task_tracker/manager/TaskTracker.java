@@ -1,5 +1,7 @@
 package ru.practicum.task_tracker.manager;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import ru.practicum.task_tracker.task.Epic;
@@ -7,11 +9,11 @@ import ru.practicum.task_tracker.task.Subtask;
 import ru.practicum.task_tracker.task.Task;
 
 public interface TaskTracker {
-    long createTask(Task task);
+    long createTask(Task task) throws IOException;
 
-    long createEpic(Epic epic);
+    long createEpic(Epic epic) throws IOException;
 
-    Long addNewSubtask(Subtask subtask);
+    Long addNewSubtask(Subtask subtask) throws IOException;
 
     String updateTaskStatus(Task task);
 
@@ -42,4 +44,6 @@ public interface TaskTracker {
     Subtask getSubtask(Long id);
 
     Epic getEpic(Long id);
+    void saveHistory(File file);
+    void loadFromFile();
 }

@@ -1,5 +1,6 @@
 package ru.practicum.task_tracker.manager;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
@@ -15,32 +16,37 @@ public class InMemoryTaskManager implements TaskTracker {
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public long createTask(Task task) {
-        task.setId(generateId());
+    public long createTask(Task task) throws IOException {
+        if(task.getId() == null) {
+            task.setId(generateId());
+        }
         tasks.put(task.getId(), task);
         return task.getId();
     }
 
     @Override
-    public long createEpic(Epic epic) {
-        epic.setId(generateId());
+    public long createEpic(Epic epic) throws IOException {
+        if (epic.getId() == null) {
+            epic.setId(generateId());
+        }
         epics.put(epic.getId(), epic);
         return epic.getId();
     }
 
     @Override
-    public Long addNewSubtask(Subtask subtask) {
+    public Long addNewSubtask(Subtask subtask) throws IOException {
         Epic epic = epics.get(subtask.getEpicId());
         if (epic == null) {
             return null;
         }
-        subtask.setId(generateId());
+        if(subtask.getId() == null) {
+            subtask.setId(generateId());
+        }
         subtasks.put(subtask.getId(), subtask);
         epic.addSubtaskId(subtask.getId());
         updateEpicStatus(subtask.getEpicId());
         return subtask.getId();
     }
-
     @Override
     public String updateTaskStatus(Task task) {
         if (task.getStatus().equals(Status.IN_PROGRESS)) {
@@ -169,7 +175,6 @@ public class InMemoryTaskManager implements TaskTracker {
                 return tasks.get(idTask);
             }
         }
-        System.out.println("Task с таким id не существует");
         return null;
     }
 
@@ -181,7 +186,6 @@ public class InMemoryTaskManager implements TaskTracker {
                 return subtasks.get(idSubtask);
             }
         }
-        System.out.println("Subtask с таким id не существует");
         return null;
     }
 
@@ -193,7 +197,6 @@ public class InMemoryTaskManager implements TaskTracker {
                 return epics.get(idEpic);
             }
         }
-        System.out.println("Epic с таким id не существует");
         return null;
     }
 
@@ -222,4 +225,25 @@ public class InMemoryTaskManager implements TaskTracker {
             System.out.println(historyManager.getHistory().get(i).getName());
         }
     }
+
+    protected List<Task> getTasks() {
+        return new ArrayList<>();
+    }
+    @Override
+    public void saveHistory(File file) {
+        try(Writer fileWriter = new FileWriter(file, true);) {
+            fileWriter.write("\n" + CSVFormatter.historyToString(historyManager) + "\n");
+        }
+        catch (FileNotFoundException e){
+            System.out.println("Поймано исключение при охраниении в файл");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void loadFromFile() {
+    }
 }
+
+//доработать выовд чтобы он был не цифрами
