@@ -9,28 +9,30 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileBackedTasksManager extends InMemoryTaskManager{
+public class FileBackedTasksManager extends InMemoryTaskManager {
+
     File file;
+
     public FileBackedTasksManager(File file) {
         this.file = file;
     }
+
     private static List<String> lines = new ArrayList<>();
 
-    public void loadFromFile(){
-        try(Reader fileReader = new FileReader(file)) {
+    public void loadFromFile() {
+        try (Reader fileReader = new FileReader(file)) {
             BufferedReader br = new BufferedReader(fileReader);
-            while (br.ready()){
+            while (br.ready()) {
                 String line = br.readLine();
-                if(!line.isEmpty()){
+                if (!line.isEmpty()) {
                     lines.add(line);
-                }
-                else if(line.isEmpty()){
+                } else if (line.isEmpty()) {
                     sortTasks();
                     List<Integer> historyInt = CSVFormatter.historyFromString(br.readLine());
-                    for(Long i = 0L; i < historyInt.size(); i++){
-                        if(super.getEpic(i) != null){
+                    for (Long i = 0L; i < historyInt.size(); i++) {
+                        if (super.getEpic(i) != null) {
                             Epic epic = super.getEpic(i);
-                        }else if(super.getTask(i) != null){
+                        } else if (super.getTask(i) != null) {
                             Task task = super.getTask(i);
                         } else if (super.getSubtask(i) != null) {
                             Subtask subtask = super.getSubtask(i);
@@ -45,22 +47,22 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
             throw new RuntimeException(e);
         }
     }
+
     public void sortTasks() throws IOException {
-        for(int i = 0; i < lines.size(); i++){
+        for (int i = 0; i < lines.size(); i++) {
             String s = lines.get(i);
             Task task = CSVFormatter.fromString(s);
-            if(task.getTaskType().equals(TaskType.EPIC)){
+            if (task.getTaskType().equals(TaskType.EPIC)) {
                 Task newEpic = new Epic(task.getName(), task.getDescription(), task.getStatus());
                 newEpic.setId(task.getId());
                 super.createEpic((Epic) newEpic);
                 //super.reCreateEpic((Epic) task);
-            }
-            else if(task.getTaskType().equals(TaskType.TASK)){
+            } else if (task.getTaskType().equals(TaskType.TASK)) {
                 Task newTask = new Task(task.getName(), task.getDescription(), task.getStatus());
                 newTask.setId(task.getId());
                 super.createTask(newTask);
                 //super.reCreateTask(task);
-            }else if(task.getTaskType().equals(TaskType.SUBTASK)){
+            } else if (task.getTaskType().equals(TaskType.SUBTASK)) {
                 Subtask newSubtask = new Subtask(task.getName(), task.getDescription(), task.getStatus(), task.getEpicId());
                 newSubtask.setId(task.getId());
                 super.addNewSubtask((Subtask) task);
@@ -95,25 +97,24 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
     }
 
     private void save(Task task) throws IOException {
-        try(Writer fileWriter = new FileWriter(file, true);) {
+        try (Writer fileWriter = new FileWriter(file, true);) {
             fileWriter.write(CSVFormatter.toString(task) + "\n");
 
-        }
-        catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("Поймано исключение при охраниении в файл");
         }
 
     }
 
-    private void saveSubtask(Subtask subtask) throws IOException{
-        try(Writer fileWriter = new FileWriter(file, true);) {
+    private void saveSubtask(Subtask subtask) throws IOException {
+        try (Writer fileWriter = new FileWriter(file, true);) {
             fileWriter.write(CSVFormatter.toString(subtask) + "\n");
-        }
-        catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("Поймано исключение при сохраниении в файл");
         }
 
     }
+
     @Override
     public Task getTask(Long id) {
         Task task = super.getTask(id);
@@ -123,7 +124,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager{
     @Override
     public Subtask getSubtask(Long id) {
         Subtask subtask = super.getSubtask(id);
-
         return subtask;
     }
 

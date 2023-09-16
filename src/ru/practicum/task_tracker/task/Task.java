@@ -24,6 +24,7 @@ public class Task {
     public Long getId() {
         return id;
     }
+
     public String getName() {
         return name;
     }
@@ -59,6 +60,7 @@ public class Task {
     public TaskType getTaskType() {
         return taskType;
     }
+
     public Long getEpicId() {
         return null;
     }

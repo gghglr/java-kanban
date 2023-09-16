@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskTracker {
 
     @Override
     public long createTask(Task task) throws IOException {
-        if(task.getId() == null) {
+        if (task.getId() == null) {
             task.setId(generateId());
         }
         tasks.put(task.getId(), task);
@@ -39,7 +39,7 @@ public class InMemoryTaskManager implements TaskTracker {
         if (epic == null) {
             return null;
         }
-        if(subtask.getId() == null) {
+        if (subtask.getId() == null) {
             subtask.setId(generateId());
         }
         subtasks.put(subtask.getId(), subtask);
@@ -47,6 +47,7 @@ public class InMemoryTaskManager implements TaskTracker {
         updateEpicStatus(subtask.getEpicId());
         return subtask.getId();
     }
+
     @Override
     public String updateTaskStatus(Task task) {
         if (task.getStatus().equals(Status.IN_PROGRESS)) {
@@ -96,7 +97,7 @@ public class InMemoryTaskManager implements TaskTracker {
     @Override
     public void updateEpicInfo(Epic epic, Long id) {
         Epic oldEpicInfo = epics.get(id);
-        if(oldEpicInfo != null){
+        if (oldEpicInfo != null) {
             oldEpicInfo.setDescription(epic.getDescription());
             oldEpicInfo.setSubtaskIds(epic.getSubtaskIds());
         }
@@ -229,12 +230,12 @@ public class InMemoryTaskManager implements TaskTracker {
     protected List<Task> getTasks() {
         return new ArrayList<>();
     }
+
     @Override
     public void saveHistory(File file) {
-        try(Writer fileWriter = new FileWriter(file, true);) {
+        try (Writer fileWriter = new FileWriter(file, true);) {
             fileWriter.write("\n" + CSVFormatter.historyToString(historyManager) + "\n");
-        }
-        catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             System.out.println("Поймано исключение при охраниении в файл");
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -44,6 +44,8 @@ public interface TaskTracker {
     Subtask getSubtask(Long id);
 
     Epic getEpic(Long id);
+
     void saveHistory(File file);
+
     void loadFromFile();
 }

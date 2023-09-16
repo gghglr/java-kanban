@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        /*TaskTracker taskTracker = Managers.getDefault();
+        TaskTracker taskTracker = Managers.getDefault();
 
         Task task1 = new Task("Прочитать книгу", "Джордж Оруэлл, 1984", Status.NEW);
         long taskId1 = taskTracker.createTask(task1);
@@ -64,7 +64,7 @@ public class Main {
         Subtask subtask4 = new Subtask("Протереть везде полы и пыль", "Со средством", "New", epic2Id);
         taskTracker.updateSubtaskInfo(subtask4, subtaskId2);
         taskTracker.print();*/
-        /*
+
         System.out.println("История просмоторов задач: ");
         taskTracker.getTask(taskId2);
         taskTracker.getTask(taskId2);
@@ -74,6 +74,6 @@ public class Main {
         taskTracker.getSubtask(subtaskId3);
         taskTracker.getSubtask(subtaskId3);
         taskTracker.printHistory();
-        */
+
     }
 }

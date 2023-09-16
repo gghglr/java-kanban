@@ -14,6 +14,7 @@ public class Subtask extends Task {
         super(id, name, desc, status);
         this.epicId = epicId;
     }
+
     @Override
     public Long getEpicId() {
         return epicId;
