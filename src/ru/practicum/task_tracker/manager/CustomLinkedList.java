@@ -4,6 +4,7 @@ import ru.practicum.task_tracker.task.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CustomLinkedList {
@@ -11,8 +12,8 @@ public class CustomLinkedList {
     private Node first;
     private Node last;
 
-    static class Node {
-        Task task;
+    private static class Node {
+        final Task task;
         Node prev;
         Node next;
 
@@ -50,8 +51,8 @@ public class CustomLinkedList {
         last = node;
     }
 
-    public ArrayList<Task> getTasks() {
-        ArrayList<Task> tasks = new ArrayList<>();
+    public List<Task> getTasks() {
+        List<Task> tasks = new ArrayList<>();
         for (Node node : nodeMap.values()) {
             tasks.add(node.task);
         }

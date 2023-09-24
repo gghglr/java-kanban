@@ -1,19 +1,15 @@
 package ru.practicum.task_tracker.manager;
 
-import ru.practicum.task_tracker.Main;
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Status;
 import ru.practicum.task_tracker.task.Subtask;
 import ru.practicum.task_tracker.task.Task;
 
-import javax.sound.midi.Soundbank;
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 public class FileBackedTaskManagerTest {
-    public static void main(String[] args) throws IOException {
-        File file = new File("/Users/aleksejurlov/yandexPracticum/finalTask/java-sprint3-hw/text.txt");
+    public static void main(String[] args){
+        File file = new File("text.txt");
         FileBackedTasksManager saveLine = new FileBackedTasksManager(file);
 
         //ЗАПИСЬ В ФАЙЛ
@@ -40,7 +36,9 @@ public class FileBackedTaskManagerTest {
         saveLine.getTask(taskId3);
         saveLine.getSubtask(subtaskId1);
         saveLine.getSubtask(subtaskId2);
+        saveLine.save();
         saveLine.saveHistory(file);
+
 
         System.out.println("Проверка, что в новом FileBackedTasksManager все восстановилось:");
         FileBackedTasksManager newFileBackedTasksManager = new FileBackedTasksManager(file);
@@ -48,5 +46,6 @@ public class FileBackedTaskManagerTest {
         newFileBackedTasksManager.print(); //печатаем из памяти
         System.out.println("\nИстория просмотров: \n");
         newFileBackedTasksManager.printHistory(); //печатаем историю из памяти
+        //разобраться с исклбчениями и кинуть на праверку
     }
 }

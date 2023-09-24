@@ -15,6 +15,9 @@ public class CSVFormatter {
         String id = String.valueOf(task.getId());
         TaskType type = task.getTaskType();
         String currType = "";
+        String name = task.getName();
+        String status = task.getStringStatus();
+        String desc = task.getDescription();
         switch (type) {
             case EPIC:
                 currType = "EPIC";
@@ -22,10 +25,11 @@ public class CSVFormatter {
             case TASK:
                 currType = "TASK";
                 break;
+            case SUBTASK:
+                currType = "SUBTASK";
+                String epicId= String.valueOf(Subtask.getEpicId());
+                return id + "," + currType + "," + name + "," + status + "," + desc + "," + epicId;
         }
-        String name = task.getName();
-        String status = task.getStringStatus();
-        String desc = task.getDescription();
         return id + "," + currType + "," + name + "," + status + "," + desc;
     }
 
@@ -51,12 +55,12 @@ public class CSVFormatter {
 
         switch (type) {
             case TASK:
-                return new Task(id, name, description, status);
+                return new Task(id, name, description, status, type);
             case SUBTASK:
                 long epicId = Long.parseLong(tokens[5]);
-                return new Subtask(id, name, description, status, epicId);
+                return new Subtask(id, name, description, status, epicId, type);
             case EPIC:
-                return new Epic(id, name, description, status);
+                return new Epic(id, name, description, status, type);
 
         }
 

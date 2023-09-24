@@ -9,11 +9,11 @@ import ru.practicum.task_tracker.task.Subtask;
 import ru.practicum.task_tracker.task.Task;
 
 public interface TaskTracker {
-    long createTask(Task task) throws IOException;
+    long createTask(Task task);
 
-    long createEpic(Epic epic) throws IOException;
+    long createEpic(Epic epic);
 
-    Long addNewSubtask(Subtask subtask) throws IOException;
+    Long addNewSubtask(Subtask subtask);
 
     String updateTaskStatus(Task task);
 

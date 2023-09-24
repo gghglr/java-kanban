@@ -16,7 +16,7 @@ public class InMemoryTaskManager implements TaskTracker {
     private HistoryManager historyManager = Managers.getDefaultHistory();
 
     @Override
-    public long createTask(Task task) throws IOException {
+    public long createTask(Task task){
         if (task.getId() == null) {
             task.setId(generateId());
         }
@@ -25,7 +25,7 @@ public class InMemoryTaskManager implements TaskTracker {
     }
 
     @Override
-    public long createEpic(Epic epic) throws IOException {
+    public long createEpic(Epic epic){
         if (epic.getId() == null) {
             epic.setId(generateId());
         }
@@ -34,7 +34,7 @@ public class InMemoryTaskManager implements TaskTracker {
     }
 
     @Override
-    public Long addNewSubtask(Subtask subtask) throws IOException {
+    public Long addNewSubtask(Subtask subtask){
         Epic epic = epics.get(subtask.getEpicId());
         if (epic == null) {
             return null;
@@ -227,9 +227,7 @@ public class InMemoryTaskManager implements TaskTracker {
         }
     }
 
-    protected List<Task> getTasks() {
-        return new ArrayList<>();
-    }
+
 
     @Override
     public void saveHistory(File file) {
@@ -244,6 +242,17 @@ public class InMemoryTaskManager implements TaskTracker {
 
     @Override
     public void loadFromFile() {
+    }
+    public Map<Long, Task> getTasks(){
+        return tasks;
+    }
+
+    public Map<Long, Epic> getEpics() {
+        return epics;
+    }
+
+    public Map<Long, Subtask> getSubtasks() {
+        return subtasks;
     }
 }
 

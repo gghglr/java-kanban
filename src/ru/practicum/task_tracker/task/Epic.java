@@ -5,15 +5,15 @@ import java.util.List;
 
 public class Epic extends Task {
     private List<Long> subtaskIds; // в этом списке лежат id сабстасков для эпика
-    private TaskType taskType = TaskType.EPIC;
 
     public Epic(String name, String desc, Status status) {
         super(name, desc, status);
         subtaskIds = new ArrayList<>();
+        setTaskType(TaskType.EPIC);
     }
 
-    public Epic(Long id, String name, String desc, Status status) {
-        super(id, name, desc, status);
+    public Epic(Long id, String name, String desc, Status status, TaskType taskType) {
+        super(id, name, desc, status, taskType);
         subtaskIds = new ArrayList<>();
     }
 
@@ -33,8 +33,4 @@ public class Epic extends Task {
         subtaskIds.remove(id);
     }
 
-    @Override
-    public TaskType getTaskType() {
-        return taskType;
-    }
 }

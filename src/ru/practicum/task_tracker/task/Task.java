@@ -6,7 +6,6 @@ public class Task {
     protected String description;
     protected Status status;
     private TaskType taskType = TaskType.TASK;
-    protected Long idS;
 
     public Task(String name, String description, Status status) {
         this.name = name;
@@ -14,11 +13,12 @@ public class Task {
         this.status = status;
     }
 
-    public Task(Long id, String name, String description, Status status) {
-        this.idS = id;
+    public Task(Long id, String name, String description, Status status, TaskType taskType) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.status = status;
+        this.taskType = taskType;
     }
 
     public Long getId() {
@@ -49,19 +49,19 @@ public class Task {
         this.name = name;
     }
 
-    public void setDescription(String desc) {
-        this.description = desc;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setStatus(Status status2) {
-        this.status = status2;
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public TaskType getTaskType() {
         return taskType;
     }
 
-    public Long getEpicId() {
-        return null;
+    public void setTaskType(TaskType taskType) {
+        this.taskType = taskType;
     }
 }
