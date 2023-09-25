@@ -72,9 +72,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
 
     public void save(){
-        file.delete();
-        file = new File("text.txt");
-        try (Writer fileWriter = new FileWriter(file, true);) {
+
+        try (Writer fileWriter = new FileWriter(file, false)) {
             for(Task task : getTasks().values()){
                 fileWriter.write(CSVFormatter.toString(task) + "\n");
             }
