@@ -18,6 +18,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     public FileBackedTasksManager(File file) {
         this.file = file;
     }
+    public FileBackedTasksManager(){};
 
     public void loadFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -40,8 +41,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     break;
                 }
             }
-        }catch (FileNotFoundException e){
-            throw new ManagerSaveException(e.getMessage());
         }
         catch (IOException e) {
             throw new ManagerSaveException(e.getMessage());
@@ -61,37 +60,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 newTask.setId(task.getId());
                 super.createTask(newTask);
             } else if (task.getTaskType().equals(TaskType.SUBTASK)) {
-                Subtask newSubtask = new Subtask(task.getName(), task.getDescription(), task.getStatus(), Subtask.getEpicId());
+                Subtask subtask = (Subtask) task;
+                Subtask newSubtask = new Subtask(task.getName(), task.getDescription(), task.getStatus(), subtask.getEpicId());
                 newSubtask.setId(task.getId());
-                super.addNewSubtask((Subtask) task);
+                super.addNewSubtask(newSubtask);
             }
         }
     }
 
 
 
-    @Override
-    public long createEpic(Epic epic){
-        long id;
-        id = super.createEpic(epic);
-        return id;
-    }
-
-    @Override
-    public long createTask(Task task){
-        long id;
-        id = super.createTask(task);
-        return id;
-    }
-
-    @Override
-    public Long addNewSubtask(Subtask subtask){
-        Long id;
-        id = super.addNewSubtask(subtask);
-        return id;
-    }
 
     public void save(){
+        file.delete();
+        file = new File("text.txt");
         try (Writer fileWriter = new FileWriter(file, true);) {
             for(Task task : getTasks().values()){
                 fileWriter.write(CSVFormatter.toString(task) + "\n");
@@ -105,8 +87,6 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 fileWriter.write(CSVFormatter.toString(subtask) + "\n");
             }
 
-        } catch (FileNotFoundException e) {
-            throw new ManagerSaveException(e.getMessage());
         } catch (IOException e) {
             throw new ManagerSaveException(e.getMessage());
         }
@@ -135,5 +115,13 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         FileBackedTasksManager o = (FileBackedTasksManager) obj;
         boolean tasksEquals = getTasks().equals(o.getTasks());
         return tasksEquals;
+    }
+
+    public void saveHistory(File file) {
+        try (Writer fileWriter = new FileWriter(file, true);) {
+            fileWriter.write("\n" + CSVFormatter.historyToString(super.getHistoryManager()) + "\n");
+        } catch (IOException e) {
+            throw new ManagerSaveException(e.getMessage());
+        }
     }
 }

@@ -21,17 +21,17 @@ public class FileBackedTaskManagerTest {
 
         Subtask subtask1 = new Subtask("Пропылесосить", "Включить пылесос и пропылесосить все команты",
                 Status.DONE, epic1Id);
-        long subtaskId1 = saveLine.addNewSubtask(subtask1);
+        Long subtaskId1 = saveLine.addNewSubtask(subtask1);
 
         Subtask subtask2 = new Subtask("Влажная уборка", "Налить воды в ведро добавить средство и " +
                 "сделать влажную уборку в каждой команте", Status.DONE, epic1Id);
-        long subtaskId2 = saveLine.addNewSubtask(subtask2);
+        Long subtaskId2 = saveLine.addNewSubtask(subtask2);
 
 
         Epic epic2 = new Epic("Сходить в магазин", "Купить продукты для омлета", Status.NEW);
         long epic2Id = saveLine.createEpic(epic2);
         Subtask subtask3 = new Subtask("Купить молоко", "1 литр молока", Status.NEW, epic2Id);
-        long subtaskId3 = saveLine.addNewSubtask(subtask3);
+        Long subtaskId3 = saveLine.addNewSubtask(subtask3);
 
         saveLine.getTask(taskId3);
         saveLine.getSubtask(subtaskId1);

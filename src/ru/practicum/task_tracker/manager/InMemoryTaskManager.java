@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
+import ru.practicum.task_tracker.exception.ManagerSaveException;
 import ru.practicum.task_tracker.task.*;
 
 public class InMemoryTaskManager implements TaskTracker {
@@ -143,18 +144,14 @@ public class InMemoryTaskManager implements TaskTracker {
 
     //все сабтаски
     @Override
-    public List<String> printEpicById(Epic epic) { // метод возрщения и печати конкретного эпика
+    public List<String> getNamesOfEpicSubtasks (Epic epic) {
         List<String> allSubtasksForCurrentEpic = new ArrayList<>();
-        System.out.println("Эпик: " + epic.getName() + " Статус: " + epic.getStatus());
         for (Subtask subtask : subtasks.values()) {
             for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
                 if (subtask.getId().equals(epic.getSubtaskIds().get(i))) {
                     allSubtasksForCurrentEpic.add(subtask.getName());
                 }
             }
-        }
-        for (int j = 0; j < allSubtasksForCurrentEpic.size(); j++) {
-            System.out.println(allSubtasksForCurrentEpic.get(j));
         }
         return allSubtasksForCurrentEpic;
     }
@@ -226,23 +223,6 @@ public class InMemoryTaskManager implements TaskTracker {
             System.out.println(historyManager.getHistory().get(i).getName());
         }
     }
-
-
-
-    @Override
-    public void saveHistory(File file) {
-        try (Writer fileWriter = new FileWriter(file, true);) {
-            fileWriter.write("\n" + CSVFormatter.historyToString(historyManager) + "\n");
-        } catch (FileNotFoundException e) {
-            System.out.println("Поймано исключение при охраниении в файл");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public void loadFromFile() {
-    }
     public Map<Long, Task> getTasks(){
         return tasks;
     }
@@ -254,6 +234,8 @@ public class InMemoryTaskManager implements TaskTracker {
     public Map<Long, Subtask> getSubtasks() {
         return subtasks;
     }
-}
 
-//доработать выовд чтобы он был не цифрами
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+}

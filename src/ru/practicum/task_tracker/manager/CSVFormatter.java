@@ -10,7 +10,7 @@ public class CSVFormatter {
     private CSVFormatter() {
     }
 
-    public static String toString(Task task) { //строка из такси
+    public static String toString(Task task) {
         //id,type,name,status,description,epic
         String id = String.valueOf(task.getId());
         TaskType type = task.getTaskType();
@@ -26,23 +26,15 @@ public class CSVFormatter {
                 currType = "TASK";
                 break;
             case SUBTASK:
+                Subtask subtask = (Subtask) task;
                 currType = "SUBTASK";
-                String epicId= String.valueOf(Subtask.getEpicId());
+                String epicId= String.valueOf(subtask.getEpicId());
                 return id + "," + currType + "," + name + "," + status + "," + desc + "," + epicId;
         }
         return id + "," + currType + "," + name + "," + status + "," + desc;
     }
 
-    public static String toString(Subtask subtask) { //строка из такси
-        //id,type,name,status,description,epic
-        String id = String.valueOf(subtask.getId());
-        String type = "SUBTASK";
-        String name = subtask.getName();
-        String status = subtask.getStringStatus();
-        String desc = subtask.getDescription();
-        String epicId = String.valueOf(subtask.getEpicId());
-        return id + "," + type + "," + name + "," + status + "," + desc + "," + epicId;
-    }
+
 
     public static Task fromString(String taskStr) {
         String[] tokens = taskStr.split(",");

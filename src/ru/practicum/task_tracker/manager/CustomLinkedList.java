@@ -13,7 +13,7 @@ public class CustomLinkedList {
     private Node last;
 
     private static class Node {
-        final Task task;
+        private final Task task;
         Node prev;
         Node next;
 

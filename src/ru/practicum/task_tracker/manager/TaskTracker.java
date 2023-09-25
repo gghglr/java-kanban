@@ -31,7 +31,7 @@ public interface TaskTracker {
 
     void deleteSubtaskById(Long subtaskId);
 
-    List<String> printEpicById(Epic epic);
+    List<String> getNamesOfEpicSubtasks(Epic epic);
 
     void deleteEpic(Long epicId);
 
@@ -45,7 +45,5 @@ public interface TaskTracker {
 
     Epic getEpic(Long id);
 
-    void saveHistory(File file);
 
-    void loadFromFile();
 }
