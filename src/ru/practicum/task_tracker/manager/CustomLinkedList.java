@@ -14,8 +14,8 @@ public class CustomLinkedList {
 
     private static class Node {
         private final Task task;
-        Node prev;
-        Node next;
+        private Node prev;
+        private Node next;
 
         public Node(Task task, Node prev, Node next) {
             this.task = task;
@@ -36,7 +36,7 @@ public class CustomLinkedList {
         if (task == null) {
             return;
         }
-        long id = task.getId();
+        Long id = task.getId();
         remove(id);
         linkLast(task);
         nodeMap.put(id, last);

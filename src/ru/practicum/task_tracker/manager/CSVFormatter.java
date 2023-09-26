@@ -55,24 +55,26 @@ public class CSVFormatter {
                 return new Epic(id, name, description, status, type);
 
         }
-
         return null;
     }
 
     public static String historyToString(HistoryManager manager) {
         String idStr = "";
-        for (int i = 0; i < manager.getHistory().size(); i++) {
-            Task task = manager.getHistory().get(i);
-            idStr += String.valueOf(task.getId()) + ",";
+        if(manager.getHistory().size() != 0){
+            for (int i = 0; i < manager.getHistory().size(); i++) {
+                Task task = manager.getHistory().get(i);
+                idStr += task.getId() + ",";
+            }
+            return idStr.substring(0, idStr.length() - 1);
         }
-        return idStr.substring(0, idStr.length() - 1);
+        return idStr;
     }
 
-    public static List<Integer> historyFromString(String historyStr) {
+    public static List<Long> historyFromString(String historyStr) {
         String[] tokens = historyStr.split(",");
-        List<Integer> historyInt = new ArrayList<>();
+        List<Long> historyInt = new ArrayList<>();
         for (int i = 0; i < tokens.length; i++) {
-            Integer id = Integer.parseInt(tokens[i]);
+            Long id = Long.parseLong(tokens[i]);
             historyInt.add(id);
         }
         return historyInt;

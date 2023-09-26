@@ -13,8 +13,8 @@ public class FileBackedTaskManagerTest {
         FileBackedTasksManager saveLine = new FileBackedTasksManager(file);
 
         //ЗАПИСЬ В ФАЙЛ
-        Task task3 = new Task("Прочитать книгу", "Джордж Оруэлл 1984", Status.NEW); //создаем таску
-        long taskId3 = saveLine.createTask(task3); //создаем ее в памяти и сохраняем в файл
+        Task task3 = new Task("Прочитать книгу", "Джордж Оруэлл 1984", Status.NEW);
+        long taskId3 = saveLine.createTask(task3);
 
         Epic epic1 = new Epic("Убраться дома", "Быстрая уборка", Status.NEW);
         long epic1Id = saveLine.createEpic(epic1);
@@ -36,8 +36,7 @@ public class FileBackedTaskManagerTest {
         saveLine.getTask(taskId3);
         saveLine.getSubtask(subtaskId1);
         saveLine.getSubtask(subtaskId2);
-        saveLine.save();
-        saveLine.saveHistory(file);
+
 
 
         System.out.println("Проверка, что в новом FileBackedTasksManager все восстановилось:");
@@ -46,6 +45,5 @@ public class FileBackedTaskManagerTest {
         newFileBackedTasksManager.print(); //печатаем из памяти
         System.out.println("\nИстория просмотров: \n");
         newFileBackedTasksManager.printHistory(); //печатаем историю из памяти
-        //разобраться с исклбчениями и кинуть на праверку
     }
 }

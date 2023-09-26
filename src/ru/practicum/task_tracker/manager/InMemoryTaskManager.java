@@ -81,7 +81,6 @@ public class InMemoryTaskManager implements TaskTracker {
         Status status2 = null;
         for (long subtaskId : subtasksIds) {
             Subtask subtask = subtasks.get(subtaskId);
-
             if (status2 == null) {
                 status2 = subtask.getStatus();
                 if (subtasksIds.size() == 1) {
@@ -167,34 +166,30 @@ public class InMemoryTaskManager implements TaskTracker {
 
     @Override
     public Task getTask(Long id) {
-        for (Long idTask : tasks.keySet()) {
-            if (idTask == id) {
+            if (tasks.containsKey(id)) {
                 historyManager.add(tasks.get(id));
-                return tasks.get(idTask);
+                return tasks.get(id);
             }
-        }
+
         return null;
     }
 
     @Override
     public Subtask getSubtask(Long id) {
-        for (Long idSubtask : subtasks.keySet()) {
-            if (idSubtask == id) {
+            if (subtasks.containsKey(id)) {
                 historyManager.add(subtasks.get(id));
-                return subtasks.get(idSubtask);
+                return subtasks.get(id);
             }
-        }
         return null;
     }
 
     @Override
     public Epic getEpic(Long id) {
-        for (Long idEpic : epics.keySet()) {
-            if (idEpic == id) {
-                historyManager.add(epics.get(id));
-                return epics.get(idEpic);
-            }
+        if(epics.containsKey(id)){
+            historyManager.add(epics.get(id));
+            return epics.get(id);
         }
+
         return null;
     }
 
