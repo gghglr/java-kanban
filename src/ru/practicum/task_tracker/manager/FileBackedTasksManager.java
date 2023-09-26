@@ -31,14 +31,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     sortTasks();
                     for (int i = 0; i < historyInt.size(); i++) {
                         if (super.getEpic(historyInt.get(i)) != null) {
-                            Epic epic = super.getEpic(historyInt.get(i));
-                            getEpic(epic.getId());
+                            getEpic(historyInt.get(i));
                         } else if (super.getTask(historyInt.get(i)) != null) {
-                            Task task = super.getTask(historyInt.get(i));
-                            getTask(task.getId());
+                            getTask(historyInt.get(i));
                         } else if (super.getSubtask(historyInt.get(i)) != null) {
-                            Subtask subtask = super.getSubtask(historyInt.get(i));
-                            getSubtask(subtask.getId());
+                            getSubtask(historyInt.get(i));
                         }
                     }
                    break;
