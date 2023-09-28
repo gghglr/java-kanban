@@ -1,8 +1,8 @@
 package ru.practicum.task_tracker.manager;
 
-import java.io.File;
-import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Subtask;
@@ -23,13 +23,13 @@ public interface TaskTracker {
 
     void updateEpicStatus(long epicId);
 
-    void updateEpicInfo(Epic epic, Long id);
+    void updateEpicInfo(String str, Long id);
 
-    void updateSubtaskInfo(Subtask subtask, Long id);
+    void updateSubtaskInfo(String str, Long id);
 
-    void updateTaskInfo(Task task, Long id);
+    void updateTaskInfo(String str, Long id);
 
-    void deleteSubtaskById(Long subtaskId);
+    void deleteSubtaskById(Long subtaskId, Epic epic);
 
     List<String> getNamesOfEpicSubtasks(Epic epic);
 
@@ -45,5 +45,17 @@ public interface TaskTracker {
 
     Epic getEpic(Long id);
 
+    Map<Long, Task> getTasks();
+
+    Map<Long, Epic> getEpics();
+
+    Map<Long, Subtask> getSubtasks();
+
+    HistoryManager getHistoryManager();
+    LocalDateTime getEndTime(Epic epic);
+
+    Map<LocalDateTime, Task> createPrioritizedTasks(Task task);
+    Map<LocalDateTime, Task> getPrioritizedTasks();
+    boolean checkTimeStart();
 
 }

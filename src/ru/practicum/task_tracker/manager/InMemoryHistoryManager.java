@@ -14,13 +14,19 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public void remove(long id) {
+    public void remove(Long id) {
         customLinkedList.remove(id);
     }
 
     @Override
     public List<Task> getHistory() {
-        return customLinkedList.getTasks();
+
+        if(customLinkedList.getTasks().size() != 0){
+            return customLinkedList.getTasks();
+        }
+        else{
+            return null;
+        }
     }
 
 

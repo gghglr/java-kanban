@@ -2,6 +2,8 @@ package ru.practicum.task_tracker.manager;
 
 import ru.practicum.task_tracker.task.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,13 +13,15 @@ public class CSVFormatter {
     }
 
     public static String toString(Task task) {
-        //id,type,name,status,description,epic
+        //id,type,name,status,description,epic,startTime,duration
         String id = String.valueOf(task.getId());
         TaskType type = task.getTaskType();
         String currType = "";
         String name = task.getName();
         String status = task.getStringStatus();
         String desc = task.getDescription();
+        String startTime = String.valueOf(task.getStartTime());
+        String duration = String.valueOf(task.getDuration());
         switch (type) {
             case EPIC:
                 currType = "EPIC";
@@ -29,9 +33,11 @@ public class CSVFormatter {
                 Subtask subtask = (Subtask) task;
                 currType = "SUBTASK";
                 String epicId= String.valueOf(subtask.getEpicId());
-                return id + "," + currType + "," + name + "," + status + "," + desc + "," + epicId;
+                return id + "," + currType + "," + name + "," + status + "," + desc  + "," + startTime +
+                        "," + duration + "," + epicId;
         }
-        return id + "," + currType + "," + name + "," + status + "," + desc;
+        return id + "," + currType + "," + name + "," + status + "," + desc + "," + startTime +
+                "," + duration;
     }
 
 
@@ -44,16 +50,22 @@ public class CSVFormatter {
         String name = String.valueOf(tokens[2]);
         Status status = Status.valueOf(tokens[3]);
         String description = String.valueOf(tokens[4]);
-
+        LocalDateTime startTime = LocalDateTime.parse(tokens[5]);
+        long duration = Long.parseLong(tokens[6]);
         switch (type) {
             case TASK:
-                return new Task(id, name, description, status, type);
+                Task task = new Task(name, description, status, startTime, duration);
+                task.setId(id);
+                return task;
             case SUBTASK:
-                long epicId = Long.parseLong(tokens[5]);
-                return new Subtask(id, name, description, status, epicId, type);
+                long epicId = Long.parseLong(tokens[7]);
+                Subtask subtask = new Subtask(name, description, status, epicId, startTime, duration);
+                subtask.setId(id);
+                return subtask;
             case EPIC:
-                return new Epic(id, name, description, status, type);
-
+              Epic epic = new Epic( name, description, status, startTime, duration);
+              epic.setId(id);
+              return epic;
         }
         return null;
     }

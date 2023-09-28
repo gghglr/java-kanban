@@ -1,26 +1,33 @@
 package ru.practicum.task_tracker.task;
 
-public class Task {
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+
+public class Task{
     protected Long id;
     protected String name;
     protected String description;
     protected Status status;
     private TaskType taskType = TaskType.TASK;
+    private LocalDateTime startTime;
+    private long duration;
+    private LocalDateTime endTime;
 
-    public Task(String name, String description, Status status) {
+    public Task(String name, String description, Status status, LocalDateTime startTime, long duration) {
         this.name = name;
         this.description = description;
         this.status = status;
+        if(startTime != null){
+            this.startTime = startTime;
+        }
+        else if(startTime == null) { //чтобы положить в конец если дата не указана
+            startTime = LocalDateTime.of(9999, 12, 31, 23,59);
+            this.startTime = startTime;
+        }
+        this.duration = duration;
+        endTime = startTime.plus(duration, ChronoUnit.MINUTES);
+        setTaskType(TaskType.TASK);
     }
-
-    public Task(Long id, String name, String description, Status status, TaskType taskType) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.status = status;
-        this.taskType = taskType;
-    }
-
     public Long getId() {
         return id;
     }
@@ -64,4 +71,25 @@ public class Task {
     public void setTaskType(TaskType taskType) {
         this.taskType = taskType;
     }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+    public void endTime(){
+        LocalDateTime endTime = startTime.plus(duration, ChronoUnit.MINUTES);
+        this.endTime = endTime;
+    }
+
 }

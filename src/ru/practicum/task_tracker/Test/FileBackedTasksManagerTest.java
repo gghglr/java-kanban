@@ -1,20 +1,60 @@
-package ru.practicum.task_tracker.manager;
+package ru.practicum.task_tracker.Test;
 
+import org.junit.jupiter.api.Test;
+import ru.practicum.task_tracker.manager.FileBackedTasksManager;
+import ru.practicum.task_tracker.manager.HistoryManager;
+import ru.practicum.task_tracker.manager.Managers;
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Status;
 import ru.practicum.task_tracker.task.Subtask;
 import ru.practicum.task_tracker.task.Task;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.io.File;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-public class FileBackedTaskManagerTest {
-    public static void main(String[] args){
-        File file = new File("text.txt");
+public class FileBackedTasksManagerTest extends TaskManagerTest{
+    File file = new File("text.txt");
+    FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
+
+    @Test
+    public void loadFromFileTest(){
+        fileBackedTasksManager.loadFromFile();
+        //проверим размеры мап после загрузки из файла, если размер мап = количеству тасок в файле, то все ок
+        //метод save() тоже проверяется
+        assertEquals(1, fileBackedTasksManager.getTasks().size());
+        assertEquals(2, fileBackedTasksManager.getEpics().size());
+        assertEquals(4, fileBackedTasksManager.getSubtasks().size());
+    }
+
+
+    @Test
+    public void emptyTasksEpicSubtasksTest(){
+        assertEquals(null, fileBackedTasksManager.getTasks());
+
+        assertEquals(null, fileBackedTasksManager.getEpics());
+
+        assertEquals(null, fileBackedTasksManager.getSubtasks());
+    }
+
+    @Test
+    public void epicWithoutSubtask(){
+        Epic epic = new Epic("Убраться дома", "Быстрая уборка", Status.NEW,
+                LocalDateTime.of(2023, 9, 27, 19, 00), 0);
+        Long epic1Id = taskTracker.createEpic(epic);
+        assertEquals(null, epic.getSubtaskIds());
+    }
+
+    @Test
+    public void emptyHistoryTask(){
+        HistoryManager historyManager = Managers.getDefaultHistory();
+        assertEquals(null, historyManager.getHistory());
+    }
+
+    @Test
+    public void removeHistoryTaskTest(){
         FileBackedTasksManager saveLine = new FileBackedTasksManager(file);
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy:MM:dd;hh:mm");
-        //ЗАПИСЬ В ФАЙЛ
         Task task3 = new Task("Почитать книгу", "Джордж Оруэлл 1984", Status.NEW,
                 LocalDateTime.of(2023, 9, 29, 18, 40), 120);
         long taskId3 = saveLine.createTask(task3);
@@ -50,22 +90,10 @@ public class FileBackedTaskManagerTest {
 
         saveLine.getTask(taskId3);
         saveLine.getSubtask(subtaskId1);
-        saveLine.getSubtask(subtaskId2);
 
+        saveLine.removeHistoryTask(taskId3);
 
-
-        System.out.println("Проверка, что в новом FileBackedTasksManager все восстановилось:");
-        FileBackedTasksManager newFileBackedTasksManager = new FileBackedTasksManager(file);
-        newFileBackedTasksManager.loadFromFile();//загружаем из файла и закидываем в память
-        newFileBackedTasksManager.print(); //печатаем из памяти
-        System.out.println("\nИстория просмотров: \n");
-        newFileBackedTasksManager.removeHistoryTask(taskId3);
-        newFileBackedTasksManager.printHistory(); //печатаем историю из памяти
-
-        System.out.println("\nсортировка задач про времени\n");
-        for(Task task : saveLine.getPrioritizedTasks().values()){
-            System.out.println(task.getName());
-        }
-
+        assertEquals(1, saveLine.getHistoryManager().getHistory().size());
     }
+
 }

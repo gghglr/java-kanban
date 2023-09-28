@@ -1,20 +1,16 @@
 package ru.practicum.task_tracker.task;
 
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
 
     public Long epicId;
 
-    public Subtask(String name, String desc, Status status, Long epicId) {
-        super(name, desc, status);
+    public Subtask(String name, String desc, Status status, Long epicId, LocalDateTime startTime, long duration) {
+        super(name, desc, status, startTime, duration);
         this.epicId = epicId;
         setTaskType(TaskType.SUBTASK);
     }
-
-    public Subtask(Long id, String name, String desc, Status status, Long epicId, TaskType taskType) {
-        super(id, name, desc, status, taskType);
-        this.epicId = epicId;
-    }
-
 
     public Long getEpicId() {
        return epicId;

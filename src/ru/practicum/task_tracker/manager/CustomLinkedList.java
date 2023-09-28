@@ -24,12 +24,12 @@ public class CustomLinkedList {
         }
     }
 
-    public void remove(long id) {
+    public void remove(Long id) {
         Node node = nodeMap.get(id);
         if (node == null) {
             return;
         }
-        removeNode(node);
+        removeNode(node, id);
     }
 
     public void addTask(Task task) {
@@ -59,7 +59,7 @@ public class CustomLinkedList {
         return tasks;
     }
 
-    private void removeNode(Node node) {
+    private void removeNode(Node node, Long id) {
         if (node.prev != null) {
             node.prev.next = node.next;
             if (node.next == null) {
@@ -75,6 +75,7 @@ public class CustomLinkedList {
                 first.prev = null;
             }
         }
+        nodeMap.remove(id);
     }
 
 }
