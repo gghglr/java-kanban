@@ -42,6 +42,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                    break;
                 }
             }
+            sortTasks();
         }
         catch (IOException e) {
             throw new ManagerSaveException(e.getMessage());
@@ -98,20 +99,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public void save(){
         try (Writer fileWriter = new FileWriter(file)) {
-            if(getTasks() != null){
-                for (Task task : getTasks().values()) {
+            if(!getTasks().isEmpty()){
+                for (Task task : getTasks()) {
                     fileWriter.write(CSVFormatter.toString(task) + "\n");
                 }
             }
 
-            if(getEpics() != null){
-                for (Epic epic : getEpics().values()) {
+            if(!getEpics().isEmpty()){
+                for (Epic epic : getEpics()) {
                     fileWriter.write(CSVFormatter.toString(epic) + "\n");
                 }
             }
 
-            if(getSubtasks() != null){
-                for (Subtask subtask : getSubtasks().values()) {
+            if(!getSubtasks().isEmpty()){
+                for (Subtask subtask : getSubtasks()) {
                     fileWriter.write(CSVFormatter.toString(subtask) + "\n");
                 }
             }
@@ -161,45 +162,52 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         return subtask.getStringStatus();
     }
     @Override
-    public void updateEpicStatus(long epicId) {
+    public String updateEpicStatus(long epicId) {
         super.updateEpicStatus(epicId);
         save();
+        return null;
     }
 
     @Override
-    public void updateEpicInfo(String str, Long id) {
+    public String updateEpicInfo(String str, Long id) {
         super.updateEpicInfo(str, id);
         save();
+        return str;
     }
 
     @Override
-    public void updateSubtaskInfo(String str, Long id) {
+    public String updateSubtaskInfo(String str, Long id) {
         super.updateSubtaskInfo(str, id);
         save();
+        return str;
     }
 
     @Override
-    public void updateTaskInfo(String str, Long id) {
+    public String updateTaskInfo(String str, Long id) {
         super.updateTaskInfo(str, id);
         save();
+        return str;
     }
 
     @Override
-    public void deleteSubtaskById(Long subtaskId, Epic epic) {
+    public String deleteSubtaskById(Long subtaskId, Epic epic) {
         super.deleteSubtaskById(subtaskId, epic);
         save();
+        return null;
     }
 
     @Override
-    public void deleteTask(Long id) {
+    public String deleteTask(Long id) {
         super.deleteTask(id);
         save();
+        return null;
     }
 
     @Override
-    public void deleteAllSubtasks(Long epicId, Epic epic) {
-        super.deleteAllSubtasks(epicId, epic);
+    public String deleteAllSubtasks(Long epicId) {
+        super.deleteAllSubtasks(epicId);
         save();
+        return null;
     }
 
     @Override

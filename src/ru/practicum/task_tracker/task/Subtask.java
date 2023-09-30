@@ -11,7 +11,6 @@ public class Subtask extends Task {
         this.epicId = epicId;
         setTaskType(TaskType.SUBTASK);
     }
-
     public Long getEpicId() {
        return epicId;
     }

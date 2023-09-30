@@ -83,12 +83,17 @@ public class CSVFormatter {
     }
 
     public static List<Long> historyFromString(String historyStr) {
-        String[] tokens = historyStr.split(",");
-        List<Long> historyInt = new ArrayList<>();
-        for (int i = 0; i < tokens.length; i++) {
-            Long id = Long.parseLong(tokens[i]);
-            historyInt.add(id);
+        if(historyStr != null){
+            String[] tokens = historyStr.split(",");
+            List<Long> historyInt = new ArrayList<>();
+            for (int i = 0; i < tokens.length; i++) {
+                Long id = Long.parseLong(tokens[i]);
+                historyInt.add(id);
+            }
+            return historyInt;
         }
-        return historyInt;
+        else{
+            return new ArrayList<>();
+        }
     }
 }

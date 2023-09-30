@@ -2,6 +2,7 @@ package ru.practicum.task_tracker.manager;
 
 import ru.practicum.task_tracker.task.Task;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -25,7 +26,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             return customLinkedList.getTasks();
         }
         else{
-            return null;
+           return new ArrayList<>();
         }
     }
 

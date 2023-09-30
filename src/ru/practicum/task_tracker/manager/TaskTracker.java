@@ -19,21 +19,23 @@ public interface TaskTracker {
 
     String updateSubtaskStatus(Subtask subtask);
 
-    void deleteTask(Long id);
+    String deleteTask(Long id);
 
-    void updateEpicStatus(long epicId);
+    String updateEpicStatus(long epicId);
 
-    void updateEpicInfo(String str, Long id);
+    String updateEpicInfo(String str, Long id);
 
-    void updateSubtaskInfo(String str, Long id);
+    String updateSubtaskInfo(String str, Long id);
 
-    void updateTaskInfo(String str, Long id);
+    String updateTaskInfo(String str, Long id);
 
-    void deleteSubtaskById(Long subtaskId, Epic epic);
+    String deleteSubtaskById(Long subtaskId, Epic epic);
 
     List<String> getNamesOfEpicSubtasks(Epic epic);
 
     void deleteEpic(Long epicId);
+
+    String deleteAllSubtasks(Long epicId);
 
     void print();
 
@@ -45,11 +47,11 @@ public interface TaskTracker {
 
     Epic getEpic(Long id);
 
-    Map<Long, Task> getTasks();
+    List<Task> getTasks();
 
-    Map<Long, Epic> getEpics();
+    List<Epic> getEpics();
 
-    Map<Long, Subtask> getSubtasks();
+    List<Subtask> getSubtasks();
 
     HistoryManager getHistoryManager();
     LocalDateTime getEndTime(Epic epic);

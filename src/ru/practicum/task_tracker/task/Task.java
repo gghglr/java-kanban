@@ -25,7 +25,7 @@ public class Task{
             this.startTime = startTime;
         }
         this.duration = duration;
-        endTime = startTime.plus(duration, ChronoUnit.MINUTES);
+        this.endTime = startTime.plus(duration, ChronoUnit.MINUTES);
         setTaskType(TaskType.TASK);
     }
     public Long getId() {

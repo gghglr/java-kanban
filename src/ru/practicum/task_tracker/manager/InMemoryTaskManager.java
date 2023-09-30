@@ -5,8 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
-import com.sun.source.tree.Tree;
-import ru.practicum.task_tracker.exception.ManagerSaveException;
 import ru.practicum.task_tracker.task.*;
 
 public class InMemoryTaskManager implements TaskTracker{
@@ -37,9 +35,6 @@ public class InMemoryTaskManager implements TaskTracker{
         if (epic.getId() == null) {
             epic.setId(generateId());
         }
-        if(epic.getSubtaskIds() != null){
-            getEndTime(epic);
-        }
         epics.put(epic.getId(), epic);
         checkTimeStart();
         return epic.getId();
@@ -59,127 +54,152 @@ public class InMemoryTaskManager implements TaskTracker{
         updateEpicStatus(subtask.getEpicId());
         createPrioritizedTasks((Task) subtask);
         checkTimeStart();
+        getEndTime(epic);
         return subtask.getId();
     }
 
     @Override
     public String updateTaskStatus(Task task) {
-        if (task.getStatus().equals(Status.IN_PROGRESS)) {
-            task.setStatus(Status.DONE);
-        } else {
-            task.setStatus(Status.IN_PROGRESS);
+        if(tasks.containsKey(task.getId())){
+            if (task.getStatus().equals(Status.IN_PROGRESS)) {
+                task.setStatus(Status.DONE);
+            } else {
+                task.setStatus(Status.IN_PROGRESS);
+            }
+            return task.getStringStatus();
         }
-
-        return task.getStringStatus();
+       else {
+           return "Нет такой задачи";
+        }
     }
 
     @Override
     public String updateSubtaskStatus(Subtask subtask) {
-        if (subtask.getStatus().equals(Status.IN_PROGRESS)) {
-            subtask.setStatus(Status.DONE);
-        } else {
-            subtask.setStatus(Status.IN_PROGRESS);
+        if(subtasks.containsKey(subtask.getId())){
+            if (subtask.getStatus().equals(Status.IN_PROGRESS)) {
+                subtask.setStatus(Status.DONE);
+            } else {
+                subtask.setStatus(Status.IN_PROGRESS);
+            }
+            updateEpicStatus(subtask.getEpicId());
+            return subtask.getStringStatus();
         }
-        updateEpicStatus(subtask.getEpicId());
-        return subtask.getStringStatus();
+        else{
+            return "Нет такой подзадачи";
+        }
     }
 
     @Override
-    public void updateEpicStatus(long epicId) {
-        Epic epic = epics.get(epicId);
-        List<Long> subtasksIds = epic.getSubtaskIds();
-        if (subtasksIds.isEmpty()) {
-            epic.setStatus(Status.NEW);
-            return;
-        }
-        Status status2 = null;
-        for (long subtaskId : subtasksIds) {
-            Subtask subtask = subtasks.get(subtaskId);
-            if (status2 == null) {
-                status2 = subtask.getStatus();
-                if (subtasksIds.size() == 1) {
+    public String updateEpicStatus(long epicId) {
+        if(epics.containsKey(epicId)){
+            Epic epic = epics.get(epicId);
+            List<Long> subtasksIds = epic.getSubtaskIds();
+            if (subtasksIds.isEmpty()) {
+                epic.setStatus(Status.NEW);
+                return null;
+            }
+            Status status2 = null;
+            for (long subtaskId : subtasksIds) {
+                Subtask subtask = subtasks.get(subtaskId);
+                if (status2 == null) {
+                    status2 = subtask.getStatus();
+                    if (subtasksIds.size() == 1) {
+                        epic.setStatus(status2);
+                    }
+                } else if (status2.equals(subtask.getStatus()) && !status2.equals(Status.IN_PROGRESS)) {
                     epic.setStatus(status2);
+                } else {
+                    epic.setStatus(Status.IN_PROGRESS);
                 }
-            } else if (status2.equals(subtask.getStatus()) && !status2.equals(Status.IN_PROGRESS)) {
-                epic.setStatus(status2);
-            } else {
-                epic.setStatus(Status.IN_PROGRESS);
             }
         }
+        return "Нет такого эпика";
     }
 
     @Override
-    public void updateEpicInfo(String str, Long id) {
-        Epic epic;
+    public String updateEpicInfo(String str, Long id) {
         if(epics.containsKey(id)) {
-            epic = epics.get(id);
+            Epic epic = epics.get(id);
             epic.setDescription(str);
+            return str;
+        }
+        else{
+            return "Нет такого эпика";
         }
     }
 
     @Override
-    public void updateSubtaskInfo(String str, Long id) {
-        Subtask subtask;
+    public String updateSubtaskInfo(String str, Long id) {
         if(subtasks.containsKey(id)) {
-            subtask = subtasks.get(id);
+            Subtask subtask = subtasks.get(id);
             subtask.setDescription(str);
+            return str;
+        }
+        else{
+            return "Нет такой подзадачи";
         }
     }
 
     @Override
-    public void updateTaskInfo(String str, Long id) {
-        Task task;
+    public String updateTaskInfo(String str, Long id) {
         if(tasks.containsKey(id)) {
-            task = tasks.get(id);
+            Task task = tasks.get(id);
             task.setDescription(str);
+            return str;
+        }
+        else {
+            return "Нет такой задачи";
         }
     }
 
     @Override
-    public void deleteSubtaskById(Long subtaskId, Epic epic) {
+    public String deleteSubtaskById(Long subtaskId, Epic epic) {
         if(subtasks.containsKey(subtaskId)){
             subtasks.remove(subtaskId);
-        }
-        else{
-            throw new ManagerSaveException("Такой подзадачи нет");
-        }
-        if(epic.getSubtaskIds().contains(subtaskId)) {
             epic.getSubtaskIds().remove(subtaskId);
+            return "";
         }
-        else{
-            throw new ManagerSaveException("Эпик не содержит такую подзадачу");
-        }
+        return "Нет такой подзадачи";
     }
 
     @Override
-    public void deleteTask(Long id) { //удаление таска
+    public String deleteTask(Long id) { //удаление таска
         if(tasks.containsKey(id)){
             tasks.remove(id);
+            return "";
         }
-        else{
-            throw new ManagerSaveException("Такой таски нет");
-        }
+       return "Нет такой задачи";
     }
 
-    public void deleteAllSubtasks(Long epicId, Epic epic) {
-        for (Subtask subtask : subtasks.values()) {
-            if (subtask.getEpicId().equals(epicId)) {
-                epic.clearSubtaskIds(subtask.getId());
+    @Override
+    public String deleteAllSubtasks(Long epicId) {
+        if(epics.containsKey(epicId)){
+            for (Subtask subtask : subtasks.values()) {
+                if (subtask.getEpicId().equals(epicId)) {
+                    epics.get(epicId).clearSubtaskIds(subtask.getId());
+                }
+                subtasks.remove(subtask);
+                updateEpicStatus(epics.get(epicId).getId());
             }
-            subtasks.remove(subtask);
-            updateEpicStatus(epic.getId());
+            return "";
+        }
+        else {
+           return  "Нечего удалять";
         }
     }
 
     @Override
     public List<String> getNamesOfEpicSubtasks (Epic epic) {
-        List<String> allSubtasksForCurrentEpic = new ArrayList<>();
-        for (Subtask subtask : subtasks.values()) {
-            if(epic.getSubtaskIds().contains(subtask.getId())){
-                allSubtasksForCurrentEpic.add(subtask.getName());
+        if(epics.containsValue(epic)){
+            List<String> allSubtasksForCurrentEpic = new ArrayList<>();
+            for (Subtask subtask : subtasks.values()) {
+                if (epic.getSubtaskIds().contains(subtask.getId())) {
+                    allSubtasksForCurrentEpic.add(subtask.getName());
+                }
             }
+            return allSubtasksForCurrentEpic;
         }
-        return allSubtasksForCurrentEpic;
+        return new ArrayList<>();
     }
 
     @Override
@@ -197,31 +217,27 @@ public class InMemoryTaskManager implements TaskTracker{
 
     @Override
     public Task getTask(Long id) {
-            if (tasks.containsKey(id)) {
-                historyManager.add(tasks.get(id));
-                return tasks.get(id);
-            }
+        if (tasks.containsKey(id)) {
+            historyManager.add(tasks.get(id));
 
+        }
         return tasks.get(id);
     }
 
     @Override
     public Subtask getSubtask(Long id) {
-            if (subtasks.containsKey(id)) {
-                historyManager.add(subtasks.get(id));
-                return subtasks.get(id);
-            }
-        return null;
+        if (subtasks.containsKey(id)) {
+            historyManager.add(subtasks.get(id));
+        }
+        return subtasks.get(id);
     }
 
     @Override
     public Epic getEpic(Long id) {
         if(epics.containsKey(id)){
-            historyManager.add(epics.get(id));
-            return epics.get(id);
+            historyManager.getHistory().add(epics.get(id));
         }
-
-        return null;
+        return epics.get(id);
     }
 
     @Override
@@ -255,37 +271,50 @@ public class InMemoryTaskManager implements TaskTracker{
         }
     }
     @Override
-    public Map<Long, Task> getTasks(){
-
+    public List<Task> getTasks(){
         if(!tasks.isEmpty()){
-            return tasks;
+            List<Task> taskList = new ArrayList<>();
+            if (!tasks.isEmpty()) {
+                for (Task task : tasks.values()) {
+                    taskList.add(task);
+                }
+            }
+            return taskList;
         }
-        else {
-            return null;
+        else{
+            return new ArrayList<>();
         }
     }
     @Override
-    public Map<Long, Epic> getEpics() {
+    public List<Epic> getEpics() {
         if(!epics.isEmpty()){
-            return epics;
+            List<Epic> epicList = new ArrayList<>();
+            if (!epics.isEmpty()) {
+                for (Epic epic : epics.values()) {
+                    epicList.add(epic);
+                }
+            }
+            return epicList;
         }
-        else {
-            return null;
-        }
+        return new ArrayList<>();
     }
     @Override
-    public Map<Long, Subtask> getSubtasks() {
-
+    public List<Subtask> getSubtasks() {
         if(!subtasks.isEmpty()){
-            return subtasks;
+            List<Subtask> subtaskList = new ArrayList<>();
+            if (!subtasks.isEmpty()) {
+                for (Subtask subtask : subtasks.values()) {
+                    subtaskList.add(subtask);
+                }
+            }
+            return subtaskList;
         }
-        else {
-            return null;
-        }
+        return new ArrayList<>();
     }
+
     @Override
     public HistoryManager getHistoryManager() {
-        return historyManager;
+            return historyManager;
     }
     //новые методы
     @Override
@@ -303,7 +332,6 @@ public class InMemoryTaskManager implements TaskTracker{
                 }
             }
         }
-        epic.setEndTime(endTime);
         return endTime;
     }
 
