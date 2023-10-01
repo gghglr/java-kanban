@@ -9,14 +9,20 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTasksManagerTest extends TaskTrackerTest{
-    private File file = new File("text.txt");
-    private File fileEmpty = new File("textEmpty.txt");//файл, где нет истории просмотра, задач и подзадач
-
+    private final File file = new File("text.txt");
+    private final File fileEmpty = new File("textEmpty.txt");//файл, где нет истории просмотра, задач и подзадач
     private FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(file);
-    FileBackedTasksManager emptyText = new FileBackedTasksManager(fileEmpty);
-    @BeforeEach
-    public void init(){
-        setUp();
+    private FileBackedTasksManager emptyText = new FileBackedTasksManager(fileEmpty);
+
+
+    @Test
+    public void fileBackTestWithEmptyFile(){
+        emptyText.loadFromFile();
+
+        assertEquals(new ArrayList<>(), emptyText.getTasks());
+        assertEquals(1, emptyText.getEpics().size());
+        assertEquals(new ArrayList<>(), emptyText.getSubtasks());
+        assertEquals(0, emptyText.getHistoryManager().getHistory().size());
     }
 
     @Test
@@ -36,15 +42,5 @@ class FileBackedTasksManagerTest extends TaskTrackerTest{
         assertEquals(1, fileBackedTasksManager.getHistoryManager().getHistory().size());
     }
 
-    @Test
-    public void fileBackTestWithEmptyFile(){
-
-        emptyText.loadFromFile();
-
-        assertEquals(new ArrayList<>(), emptyText.getTasks());
-        assertEquals(1, emptyText.getEpics().size());
-        assertEquals(new ArrayList<>(), emptyText.getSubtasks());
-        assertEquals(0, emptyText.getHistoryManager().getHistory().size());
-    }
 
 }

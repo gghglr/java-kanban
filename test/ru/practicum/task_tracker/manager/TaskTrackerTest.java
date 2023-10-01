@@ -138,7 +138,7 @@ class TaskTrackerTest<T extends TaskTracker> {
     public void testTime(){
 
         assertEquals(LocalDateTime.of(2023,9,27,19,35),
-                taskTracker.getEndTime(epic1));
+                taskTracker.getEpic(epic1Id).getEndTime());
 
         assertEquals("Пропылесосить", taskTracker.getPrioritizedTasks()
                 .get(LocalDateTime.of(2023, 9, 27, 19,0)).getName());

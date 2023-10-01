@@ -54,7 +54,7 @@ public class InMemoryTaskManager implements TaskTracker{
         updateEpicStatus(subtask.getEpicId());
         createPrioritizedTasks((Task) subtask);
         checkTimeStart();
-        getEndTime(epic);
+        getEndTime(epic, subtask);
         return subtask.getId();
     }
 
@@ -205,10 +205,12 @@ public class InMemoryTaskManager implements TaskTracker{
     @Override
     public void deleteEpic(Long epicId) {
         Epic epic = epics.get(epicId);
-        for(Long subId: epic.getSubtaskIds()){
-            subtasks.remove(subId);
+        if(epic.getSubtaskIds() != null){
+            for (Long subId : epic.getSubtaskIds()) {
+                subtasks.remove(subId);
+            }
+            epics.remove(epicId);
         }
-        epics.remove(epicId);
     }
 
     public long generateId() {
@@ -316,22 +318,21 @@ public class InMemoryTaskManager implements TaskTracker{
     public HistoryManager getHistoryManager() {
             return historyManager;
     }
+
     //новые методы
     @Override
-    public LocalDateTime getEndTime(Epic epic){
+    public LocalDateTime getEndTime(Epic epic, Subtask subtask){
         LocalDateTime localDateTime = epic.getStartTime();
-        for(Long idSubtask : epic.getSubtaskIds()){
-            if(subtasks.containsKey(idSubtask)){
+            if(subtasks.containsKey(subtask.getId())){
                 if(epic.getEndTime() != null){
-                    endTime = epic.getEndTime().plus(subtasks.get(idSubtask).getDuration(), ChronoUnit.MINUTES);
+                    endTime = epic.getEndTime().plus(subtasks.get(subtask.getId()).getDuration(), ChronoUnit.MINUTES);
                     epic.setEndTime(endTime);
                 }
                 else{
-                    endTime = localDateTime.plus(subtasks.get(idSubtask).getDuration(), ChronoUnit.MINUTES);
+                    endTime = localDateTime.plus(subtasks.get(subtask.getId()).getDuration(), ChronoUnit.MINUTES);
                     epic.setEndTime(endTime);
                 }
             }
-        }
         return endTime;
     }
 

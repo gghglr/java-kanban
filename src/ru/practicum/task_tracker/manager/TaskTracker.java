@@ -54,7 +54,8 @@ public interface TaskTracker {
     List<Subtask> getSubtasks();
 
     HistoryManager getHistoryManager();
-    LocalDateTime getEndTime(Epic epic);
+    //новые методы
+    LocalDateTime getEndTime(Epic epic, Subtask subtask);
 
     Map<LocalDateTime, Task> createPrioritizedTasks(Task task);
     Map<LocalDateTime, Task> getPrioritizedTasks();

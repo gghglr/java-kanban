@@ -12,7 +12,7 @@ import java.util.*;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
 
-    private static List<String> lines = new ArrayList<>();
+    private static List<String> lines;
 
     private File file;
 
@@ -23,6 +23,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
 
     public void loadFromFile() {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            lines = new ArrayList<>();
             while (reader.ready()) {
                 String line = reader.readLine();
                 if (!line.isEmpty()) {
