@@ -1,28 +1,29 @@
 package ru.practicum.task_tracker.manager;
 
+import com.google.gson.Gson;
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Status;
 import ru.practicum.task_tracker.task.Subtask;
 import ru.practicum.task_tracker.task.Task;
 
 import java.io.File;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+
 
 public class FileBackedTaskManagerTest {
     public static void main(String[] args){
         File file = new File("text.txt");
         FileBackedTasksManager saveLine = new FileBackedTasksManager(file);
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy:MM:dd;hh:mm");
         //ЗАПИСЬ В ФАЙЛ
+
         Task task3 = new Task("Почитать книгу", "Джордж Оруэлл 1984", Status.NEW,
                 LocalDateTime.of(2023, 9, 29, 18, 40), 120);
         long taskId3 = saveLine.createTask(task3);
-
+        System.out.println(new Gson().toJson(task3));
         Epic epic1 = new Epic("Убраться дома", "Быстрая уборка", Status.NEW,
                 LocalDateTime.of(2023, 9, 27, 19, 00), 0);
         long epic1Id = saveLine.createEpic(epic1);
-
         Subtask subtask1 = new Subtask("Пропылесосить", "Включить пылесос и пропылесосить все команты",
                 Status.DONE, epic1Id,
                 LocalDateTime.of(2023, 9, 27, 19, 00), 20);
@@ -51,7 +52,9 @@ public class FileBackedTaskManagerTest {
         saveLine.getTask(taskId3);
         saveLine.getSubtask(subtaskId1);
         saveLine.getSubtask(subtaskId2);
-
+        System.out.println(new Gson().toJson(epic1));
+        System.out.println(new Gson().toJson(subtask1));
+        System.out.println(new Gson().toJson(subtask2));
 
 
         System.out.println("Проверка, что в новом FileBackedTasksManager все восстановилось:");

@@ -1,36 +1,32 @@
 package ru.practicum.task_tracker;
 
+import com.google.gson.Gson;
 import ru.practicum.task_tracker.manager.*;
 import ru.practicum.task_tracker.task.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws IOException {
-        TaskTracker taskTracker = Managers.getDefault();
+        TaskTracker taskTracker = new InMemoryTaskManager();
         LocalDateTime localDateTime = LocalDateTime.now();
 
         Task task1 = new Task("Прочитать книгу", "Джордж Оруэлл, 1984", Status.NEW,
                 localDateTime, 140);
         long taskId1 = taskTracker.createTask(task1);
-
+       //System.out.println(new Gson().toJson(task1));
         Task task2 = new Task("Погулять с собакой", "Пойти прогуляться по парку с собакой в 6 вечера",
                 Status.NEW, localDateTime, 30);
         long taskId2 = taskTracker.createTask(task2);
 
         Epic epic1 = new Epic("Убраться дома", "Быстрая уборка", Status.NEW, localDateTime, 30);
         long epic1Id = taskTracker.createEpic(epic1);
-
         Subtask subtask1 = new Subtask("Пропылесосить", "Включить пылесос и пропылесосить все команты",
                 Status.NEW, epic1Id, localDateTime.plus(20, ChronoUnit.MINUTES), 15);
         long subtaskId1 = taskTracker.addNewSubtask(subtask1);
-
+        //System.out.println(new Gson().toJson(epic1));
         Subtask subtask2 = new Subtask("Влажная уборка", "Налить воды в ведро, добавить средство и " +
                 "сделать влажную уборку в каждой команте", Status.NEW, epic1Id, localDateTime, 15);
         long subtaskId2 = taskTracker.addNewSubtask(subtask2);

@@ -19,6 +19,8 @@ public interface TaskTracker {
 
     String updateSubtaskStatus(Subtask subtask);
 
+    String deleteSubtaskById(Long subtaskId);
+
     String deleteTask(Long id);
 
     String updateEpicStatus(long epicId);
@@ -29,7 +31,6 @@ public interface TaskTracker {
 
     String updateTaskInfo(String str, Long id);
 
-    String deleteSubtaskById(Long subtaskId, Epic epic);
 
     List<String> getNamesOfEpicSubtasks(Epic epic);
 

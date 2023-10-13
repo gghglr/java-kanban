@@ -3,7 +3,7 @@ package ru.practicum.task_tracker.manager;
 public class Managers {
     private Managers(){};
     public static TaskTracker getDefault() {
-        return new FileBackedTasksManager();
+        return new HttpTaskManager("http://localhost:8078/");
     }
 
     public static HistoryManager getDefaultHistory() {

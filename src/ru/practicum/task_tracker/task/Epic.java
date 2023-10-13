@@ -6,15 +6,13 @@ import java.util.List;
 
 public class Epic extends Task {
     private List<Long> subtaskIds; // в этом списке лежат id сабстасков для эпика
-    private LocalDateTime endTime;
+    private LocalDateTime endTimeEpic;
 
     public Epic(String name, String desc, Status status, LocalDateTime startTime, long duration) {
         super(name, desc, status, startTime, duration);
         subtaskIds = new ArrayList<>();
         setTaskType(TaskType.EPIC);
     }
-
-
     public void addSubtaskId(long subtaskId) {
         subtaskIds.add(subtaskId);
     }
@@ -38,11 +36,11 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
-        return endTime;
+        return endTimeEpic;
     }
 
     @Override
     public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+        this.endTimeEpic = endTime;
     }
 }

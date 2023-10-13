@@ -1,16 +1,21 @@
 package ru.practicum.task_tracker.task;
 
 import java.time.LocalDateTime;
+
 import java.time.temporal.ChronoUnit;
 
 public class Task{
     protected Long id;
     protected String name;
+
     protected String description;
+
     protected Status status;
-    private TaskType taskType = TaskType.TASK;
+    protected TaskType taskType = TaskType.TASK;
+
     private LocalDateTime startTime;
-    private long duration;
+
+    protected long duration;
     private LocalDateTime endTime;
 
     public Task(String name, String description, Status status, LocalDateTime startTime, long duration) {
@@ -28,6 +33,15 @@ public class Task{
         this.endTime = startTime.plus(duration, ChronoUnit.MINUTES);
         setTaskType(TaskType.TASK);
     }
+
+    public Task(String name, String description, Status status, long duration) {
+        this.name = name;
+        this.description = description;
+        this.status = status;
+        this.duration = duration;
+        setTaskType(TaskType.TASK);
+    }
+
     public Long getId() {
         return id;
     }
@@ -52,9 +66,6 @@ public class Task{
         this.id = id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public void setDescription(String description) {
         this.description = description;
@@ -79,6 +90,7 @@ public class Task{
     public long getDuration() {
         return duration;
     }
+
 
     public LocalDateTime getEndTime() {
         return endTime;

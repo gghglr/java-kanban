@@ -94,7 +94,7 @@ class TaskTrackerTest<T extends TaskTracker> {
         assertEquals(Status.IN_PROGRESS, taskTracker.getEpic(epic1Id).getStatus());
 
         //удаление 1 подзадачи
-        taskTracker.deleteSubtaskById(subtaskId1, epic1);
+        taskTracker.deleteSubtaskById(subtaskId1);
 
         assertEquals(1, epic1.getSubtaskIds().size());
 
@@ -125,7 +125,7 @@ class TaskTrackerTest<T extends TaskTracker> {
 
         assertEquals(Status.DONE, taskTracker.getEpic(epic1Id).getStatus());//статус у эпика теперь должен стать Done
 
-        taskTracker.deleteSubtaskById(subtaskId2, epic1);
+        taskTracker.deleteSubtaskById(subtaskId2);
 
         assertEquals(1, taskTracker.getSubtasks().size());
 
@@ -163,7 +163,7 @@ class TaskTrackerTest<T extends TaskTracker> {
         assertEquals("Нет такой подзадачи", taskTracker.updateSubtaskInfo("asd", subtaskId1));
         assertEquals("Нет такого эпика", taskTracker.updateEpicInfo("asd", epic1Id));
         assertEquals("Нет такой задачи", taskTracker.deleteTask(taskId));
-        assertEquals("Нет такой подзадачи", taskTracker.deleteSubtaskById(subtaskId1, epic1));
+        assertEquals("Нет такой подзадачи", taskTracker.deleteSubtaskById(subtaskId1));
         assertEquals("Нечего удалять", taskTracker.deleteAllSubtasks(epic1Id));
         assertEquals(new ArrayList<>(), taskTracker.getNamesOfEpicSubtasks(epic1));
         assertEquals(new ArrayList<>(), taskTracker.getTasks());
@@ -184,7 +184,7 @@ class TaskTrackerTest<T extends TaskTracker> {
         assertEquals("Нет такой подзадачи", taskTracker.updateSubtaskInfo("asd", 12L));
         assertEquals("Нет такого эпика", taskTracker.updateEpicInfo("asd", 11L));
         assertEquals("Нет такой задачи", taskTracker.deleteTask(10L));
-        assertEquals("Нет такой подзадачи", taskTracker.deleteSubtaskById(12L, epic1));
+        assertEquals("Нет такой подзадачи", taskTracker.deleteSubtaskById(12L));
         assertEquals("Нечего удалять", taskTracker.deleteAllSubtasks(10L));
         assertEquals(new ArrayList<>(), taskTracker.getNamesOfEpicSubtasks(epic1));
     }

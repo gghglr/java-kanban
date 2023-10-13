@@ -12,7 +12,6 @@ public class InMemoryTaskManager implements TaskTracker{
     private final Map<Long, Subtask> subtasks = new HashMap<>();
     private final Map<Long, Task> tasks = new HashMap<>();
     private LocalDateTime endTime = null;
-
     private long currentId = 0;
     private HistoryManager historyManager = Managers.getDefaultHistory();
     private Map<LocalDateTime, Task> prioritizedTasks;
@@ -106,7 +105,7 @@ public class InMemoryTaskManager implements TaskTracker{
                     if (subtasksIds.size() == 1) {
                         epic.setStatus(status2);
                     }
-                } else if (status2.equals(subtask.getStatus()) && !status2.equals(Status.IN_PROGRESS)) {
+                } else if (subtask.getStatus().equals(status2) && !Status.IN_PROGRESS.equals(status2)) {
                     epic.setStatus(status2);
                 } else {
                     epic.setStatus(Status.IN_PROGRESS);
@@ -153,9 +152,10 @@ public class InMemoryTaskManager implements TaskTracker{
     }
 
     @Override
-    public String deleteSubtaskById(Long subtaskId, Epic epic) {
+    public String deleteSubtaskById(Long subtaskId) {
         if(subtasks.containsKey(subtaskId)){
             subtasks.remove(subtaskId);
+            Epic epic = epics.get(epics.get(subtasks.get(subtaskId).getEpicId()));
             epic.getSubtaskIds().remove(subtaskId);
             return "";
         }
@@ -221,7 +221,6 @@ public class InMemoryTaskManager implements TaskTracker{
     public Task getTask(Long id) {
         if (tasks.containsKey(id)) {
             historyManager.add(tasks.get(id));
-
         }
         return tasks.get(id);
     }
