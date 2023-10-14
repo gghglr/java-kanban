@@ -3,18 +3,15 @@ package ru.practicum.task_tracker.server;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 import ru.practicum.task_tracker.manager.HistoryManager;
-import ru.practicum.task_tracker.manager.Managers;
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Subtask;
 import ru.practicum.task_tracker.task.Task;
-
-//КОД РАБОТАЕТ СО ВСЕМИ КЛАССАМИ, У КОТОРЫХ НЕТ LOCALDATETIME, Я НЕ ПОНИМАЮ ПОЧЕМУ Не преобразовывается LocalDateTime
-//в
 
 public class HTTPServer {
     public static final int PORT = 8080;
@@ -45,18 +42,24 @@ public class HTTPServer {
             Subtask subtask;
             switch (exchange.getRequestMethod()) {
                 case "GET":
-                    key = extractKey(exchange);
                     if (TASK.equals(path)) {
+                        key = extractKey(exchange);
                         task = httpTaskManager.getTask(Long.parseLong(key));
                         sendData(exchange, task);
                     } else if (EPIC.equals(path)) {
+                        key = extractKey(exchange);
                         epic = httpTaskManager.getEpic(Long.parseLong(key));
                         sendDataEpic(exchange, epic);
                     }else if(SUBTASK.equals(path)){
+                        key = extractKey(exchange);
                         subtask = httpTaskManager.getSubtask(Long.parseLong(key));
                        sendDataSubtask(exchange, subtask);
                     }else if("history".equals(path)){
-                        sendHistory(exchange, httpTaskManager.getHistoryManager());
+                        HistoryManager historyManager = httpTaskManager.getHistoryManager();
+                        sendHistory(exchange, historyManager);
+                    }else if("getAllSubtask".equals(path)){
+                        List<Subtask> subtasks = httpTaskManager.getSubtasks();
+                        sendSubtasks(exchange, subtasks);
                     }
                     else {
                         exchange.sendResponseHeaders(404, 0);
@@ -115,14 +118,10 @@ public class HTTPServer {
     }
 
     private void sendHistory(HttpExchange exchange, HistoryManager historyManager) throws IOException {
-        if (historyManager.getHistory() == null || historyManager.getHistory().isEmpty()) {
-            exchange.sendResponseHeaders(404, 0);
-            return;
-        }
         String json = new Gson().toJson(historyManager.getHistory());
         byte[] resp = json.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
-        exchange.sendResponseHeaders(200, resp.length);
+        exchange.sendResponseHeaders(200, 0);
         exchange.getResponseBody().write(resp);
     }
 
@@ -183,6 +182,19 @@ public class HTTPServer {
         }
 
         String json = new Gson().toJson(subtask);
+        byte[] resp = json.getBytes(StandardCharsets.UTF_8);
+        exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
+        exchange.sendResponseHeaders(200, resp.length);
+        exchange.getResponseBody().write(resp);
+    }
+
+    private void sendSubtasks(HttpExchange exchange, List<Subtask> allSub) throws IOException {
+        if (allSub.isEmpty()) {
+            exchange.sendResponseHeaders(404, 0);
+            return;
+        }
+
+        String json = new Gson().toJson(allSub);
         byte[] resp = json.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         exchange.sendResponseHeaders(200, resp.length);

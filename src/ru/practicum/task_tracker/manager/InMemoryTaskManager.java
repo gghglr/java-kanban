@@ -101,9 +101,14 @@ public class InMemoryTaskManager implements TaskTracker{
             for (long subtaskId : subtasksIds) {
                 Subtask subtask = subtasks.get(subtaskId);
                 if (status2 == null) {
-                    status2 = subtask.getStatus();
+                    if(subtask.getStatus() == null){
+                        status2 = Status.NEW;
+                    }
                     if (subtasksIds.size() == 1) {
                         epic.setStatus(status2);
+                    }
+                    else {
+                        status2 = subtask.getStatus();
                     }
                 } else if (subtask.getStatus().equals(status2) && !Status.IN_PROGRESS.equals(status2)) {
                     epic.setStatus(status2);
