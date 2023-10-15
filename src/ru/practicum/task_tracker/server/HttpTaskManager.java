@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import ru.practicum.task_tracker.manager.FileBackedTasksManager;
 import ru.practicum.task_tracker.manager.HistoryManager;
+import ru.practicum.task_tracker.manager.InMemoryTaskManager;
 import ru.practicum.task_tracker.manager.TaskTracker;
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Subtask;
@@ -19,6 +20,7 @@ public class HttpTaskManager extends FileBackedTasksManager implements TaskTrack
 
     private final KVTaskClient kvTaskClient;
     private final Gson gson;
+    TaskTracker taskTracker = new InMemoryTaskManager();
 
 
     public HttpTaskManager() {
@@ -45,21 +47,21 @@ public class HttpTaskManager extends FileBackedTasksManager implements TaskTrack
         if (taskDataStr != null) {
             List<Task> taskData = gson.fromJson(taskDataStr, new TypeToken<ArrayList<Task>>() {
             }.getType());
-            taskData.forEach(d -> super.createTask(d));
+            taskData.forEach(d -> taskTracker.createTask(d));
         }
 
         String epicDataStr = kvTaskClient.load(EPIC);
         if (epicDataStr != null) {
             List<Epic> epicData = gson.fromJson(epicDataStr, new TypeToken<ArrayList<Epic>>() {
             }.getType());
-            epicData.forEach(d -> super.createEpic(d));
+            epicData.forEach(d -> taskTracker.createEpic(d));
         }
 
         String subtaskDataStr = kvTaskClient.load(SUBTASK);
         if (subtaskDataStr != null) {
             List<Subtask> subtaskData = gson.fromJson(subtaskDataStr, new TypeToken<ArrayList<Subtask>>() {
             }.getType());
-            subtaskData.forEach(d -> super.addNewSubtask(d));
+            subtaskData.forEach(d -> taskTracker.addNewSubtask(d));
         }
     }
 
@@ -68,8 +70,8 @@ public class HttpTaskManager extends FileBackedTasksManager implements TaskTrack
         if(task.getId() == null){
             task.setId(generateId());
         }
-        super.createTask(task);
-        String json = gson.toJson(super.getTasks());
+        taskTracker.createTask(task);
+        String json = gson.toJson(taskTracker.getTasks());
         kvTaskClient.put(TASK, json);
         return task.getId();
     }
@@ -78,8 +80,8 @@ public class HttpTaskManager extends FileBackedTasksManager implements TaskTrack
         if(epic.getId() == null){
             epic.setId(generateId());
         }
-        super.createEpic(epic);
-        String json = new Gson().toJson(super.getEpics());
+        taskTracker.createEpic(epic);
+        String json = new Gson().toJson(taskTracker.getEpics());
         kvTaskClient.put(EPIC, json);
         return epic.getId();
     }
@@ -88,32 +90,51 @@ public class HttpTaskManager extends FileBackedTasksManager implements TaskTrack
         if(subtask.getId() == null){
             subtask.setId(generateId());
         }
-        super.addNewSubtask(subtask);
-        String json = new Gson().toJson(super.getSubtasks());
+        taskTracker.addNewSubtask(subtask);
+        String json = new Gson().toJson(taskTracker.getSubtasks());
         kvTaskClient.put(SUBTASK, json);
         return subtask.getId();
     }
 
     @Override
     public Task getTask(Long id) {
-        return super.getTask(id);
+        return taskTracker.getTask(id);
     }
 
     @Override
     public Subtask getSubtask(Long id) {
-        return super.getSubtask(id);
+        return taskTracker.getSubtask(id);
     }
 
     @Override
     public Epic getEpic(Long id) {
-        return super.getEpic(id);
+        return taskTracker.getEpic(id);
     }
 
     @Override
     public HistoryManager getHistoryManager() {
-        String json = gson.toJson(super.getHistoryManager());
+        String json = gson.toJson(taskTracker.getHistoryManager());
         kvTaskClient.put("history", json);
-        return super.getHistoryManager();
+        return taskTracker.getHistoryManager();
     }
 
+    @Override
+    public String deleteSubtaskById(Long subtaskId) {
+        return taskTracker.deleteSubtaskById(subtaskId);
+    }
+
+    @Override
+    public String deleteTask(Long id) {
+        return taskTracker.deleteTask(id);
+    }
+
+    @Override
+    public String deleteAllSubtasks(Long epicId) {
+        return taskTracker.deleteAllSubtasks(epicId);
+    }
+
+    @Override
+    public void deleteEpic(Long epicId) {
+        taskTracker.deleteEpic(epicId);
+    }
 }

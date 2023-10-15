@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
+import ru.practicum.task_tracker.exception.ManagerSaveException;
 import ru.practicum.task_tracker.manager.HistoryManager;
 import ru.practicum.task_tracker.task.Epic;
 import ru.practicum.task_tracker.task.Subtask;
@@ -87,16 +88,15 @@ public class HTTPServer {
                 case "DELETE":
                     task = extractData(exchange);
                     if (TASK.equals(path)) {
-                        if(extractKey(exchange) != null){
+                        if(httpTaskManager.getTask(Long.parseLong(extractKey(exchange))) != null){
                             httpTaskManager.deleteTask(Long.parseLong(extractKey(exchange)));
                         }
-                        exchange.sendResponseHeaders(201,  0);
                     } else if (EPIC.equals(path)) {
-                        if(extractKey(exchange) != null){
+                        if(httpTaskManager.getEpic(Long.parseLong(extractKey(exchange))) != null){
                             httpTaskManager.deleteEpic(Long.parseLong(extractKey(exchange)));
                         }
                     } else if (SUBTASK.equals(path)) {
-                        if(extractKey(exchange) != null){
+                        if(httpTaskManager.getSubtask(Long.parseLong(extractKey(exchange))) != null){
                             httpTaskManager.deleteSubtaskById(Long.parseLong(extractKey(exchange)));
                         }else {
                             httpTaskManager.deleteAllSubtasks(Long.parseLong(extractKey(exchange)));
@@ -111,13 +111,17 @@ public class HTTPServer {
                     exchange.sendResponseHeaders(404, 3);
             }
         } catch (IOException e) {
-           throw new RuntimeException("ошибка");
+           throw new ManagerSaveException("ошибка");
         } finally {
             exchange.close();
         }
     }
 
     private void sendHistory(HttpExchange exchange, HistoryManager historyManager) throws IOException {
+        if (httpTaskManager.getHistoryManager().getHistory().isEmpty()) {
+            exchange.sendResponseHeaders(404, 0);
+            return;
+        }
         String json = new Gson().toJson(historyManager.getHistory());
         byte[] resp = json.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
@@ -189,11 +193,6 @@ public class HTTPServer {
     }
 
     private void sendSubtasks(HttpExchange exchange, List<Subtask> allSub) throws IOException {
-        if (allSub.isEmpty()) {
-            exchange.sendResponseHeaders(404, 0);
-            return;
-        }
-
         String json = new Gson().toJson(allSub);
         byte[] resp = json.getBytes(StandardCharsets.UTF_8);
         exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");

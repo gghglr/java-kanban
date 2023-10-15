@@ -159,8 +159,8 @@ public class InMemoryTaskManager implements TaskTracker{
     @Override
     public String deleteSubtaskById(Long subtaskId) {
         if(subtasks.containsKey(subtaskId)){
+            Epic epic = epics.get(subtasks.get(subtaskId).getEpicId());
             subtasks.remove(subtaskId);
-            Epic epic = epics.get(epics.get(subtasks.get(subtaskId).getEpicId()));
             epic.getSubtaskIds().remove(subtaskId);
             return "";
         }

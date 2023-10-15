@@ -69,6 +69,5 @@ public class FileBackedTaskManagerTest {
         for(Task task : saveLine.getPrioritizedTasks().values()){
             System.out.println(task.getName());
         }
-        System.out.println(new Gson().toJson(saveLine.getHistoryManager().getHistory()));
     }
 }
